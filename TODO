@@ -1,0 +1,3 @@
+Convert the criteria classes to use interfaces. Then, instead of subclassing
+these in the voting methods, they would implement them. This will make
+zope.interface a dependency.
