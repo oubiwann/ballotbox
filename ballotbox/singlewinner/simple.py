@@ -24,6 +24,6 @@ class MajorityRuleVoting(object):
         winner = []
         for name, votes in ballotbox.items():
             fraction = Decimal(votes) / Decimal(total_votes)
-            if fraction > Decimal(.5):
+            if fraction > Decimal(".5"):
                 winner = [(votes, name)]
         return winner

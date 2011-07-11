@@ -1,7 +1,7 @@
 from zope.interface import Interface
 
 
-class ICriterion(Interfac):
+class ICriterion(Interface):
     """
     The base interface for all criteria.
     """
@@ -53,7 +53,7 @@ class IMajorityLoserCriterion(ICriterion):
     """
 
 
-class IMutualMajorityCriterion(MajorityCriterion, MajorityLoserCriterion):
+class IMutualMajorityCriterion(IMajorityCriterion, IMajorityLoserCriterion):
     """
     The mutual majority criterion is a criterion used to compare voting
     systems. It is also known as the majority criterion for solid coalitions
@@ -143,7 +143,7 @@ class IConsistencyCriterion(ICriterion):
     """
 
 
-class IParticipationCriterion(
+class IParticipationCriterion(ICriterion):
     """
     The participation criterion is a voting system criterion. It is also known
     as the "no show paradox". It has been defined as follows:
@@ -160,8 +160,8 @@ class IParticipationCriterion(
           from the set X.
 
     Plurality voting, approval voting, range voting, and the Borda count all
-    satisfy the participation criterion.[citation needed] All Condorcet
-    methods, Bucklin voting, and IRV fail.
+    satisfy the participation criterion. All Condorcet methods, Bucklin voting,
+    and IRV fail.
 
     Voting systems that fail the participation criterion allow a particularly
     unusual strategy of not voting to, in some circumstances, help a voter's
@@ -172,7 +172,7 @@ class IParticipationCriterion(
     """
 
 
-class ICondorcetCriterion(MajorityCriterion):
+class ICondorcetCriterion(IMajorityCriterion):
     """
     The Condorcet candidate or Condorcet winner of an election is the candidate
     who, when compared with every other candidate, is preferred by more voters.
@@ -193,7 +193,7 @@ class ICondorcetCriterion(MajorityCriterion):
     """
 
 
-class ICondorcetLoserCriterion(MajorityLoserCriterion):
+class ICondorcetLoserCriterion(IMajorityLoserCriterion):
     """
     In single-winner voting system theory, the Condorcet loser criterion is a
     measure for differentiating voting systems. It implies the majority loser
@@ -265,14 +265,14 @@ class IIndependenceOfClonesCriterion(ICriterion):
     distribution of other votes.
 
     Elections methods that fail independence of clones can either be clone
-    negative (the addition of an identical candidate decreases a candidate’s
+    negative (the addition of an identical candidate decreases a candidate's
     chance of winning) or clone positive (the reverse). The Borda count is an
     example of a clone positive method. Plurality is an example of a clone
     negative method because of vote-splitting.
 
     Instant-runoff voting, approval voting and range voting meet the
     independence of clones criterion. Some election methods that comply with
-    the Condorcet criterion such as Ranked pairs and Schulze[2] also meet
+    the Condorcet criterion such as Ranked pairs and Schulze also meet
     independence of clones.
 
     The Borda count, Minimax, two-round system, Bucklin voting and plurality

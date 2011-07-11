@@ -1,0 +1,56 @@
+Copeland's Method
+-----------------
+
+Below is an example of an election that took place between 5 candidates
+competing for one seat::
+
+    >>> from ballotbox.ballot import BallotBox
+    >>> from ballotbox.singlewinner.plurality import FirstPastPostVoting
+    >>> from ballotbox.singlewinner.preferential import CopelandVoting
+
+    >>> rounds = []
+    >>> round1 = BallotBox(method=FirstPastPostVoting)
+    >>> round1.add_votes({"alice": 41, "bob": 59})
+    >>> rounds.append(round1)
+
+    >>> round2 = BallotBox(method=FirstPastPostVoting)
+    >>> round2.add_votes({"alice": 71, "carol": 29})
+    >>> rounds.append(round2)
+
+    >>> round3 = BallotBox(method=FirstPastPostVoting)
+    >>> round3.add_votes({"alice": 61, "dave": 39})
+    >>> rounds.append(round3)
+
+    >>> round4 = BallotBox(method=FirstPastPostVoting)
+    >>> round4.add_votes({"alice": 71, "eve": 0})
+    >>> rounds.append(round4)
+
+    >>> round5 = BallotBox(method=FirstPastPostVoting)
+    >>> round5.add_votes({"bob": 30, "carol": 60})
+    >>> rounds.append(round5)
+
+    >>> round6 = BallotBox(method=FirstPastPostVoting)
+    >>> round6.add_votes({"bob": 30, "dave": 70})
+    >>> rounds.append(round6)
+
+    >>> round7 = BallotBox(method=FirstPastPostVoting)
+    >>> round7.add_votes({"bob": 59, "eve": 41})
+    >>> rounds.append(round7)
+
+    >>> round8 = BallotBox(method=FirstPastPostVoting)
+    >>> round8.add_votes({"carol": 60, "dave": 10})
+    >>> rounds.append(round8)
+
+    >>> round9 = BallotBox(method=FirstPastPostVoting)
+    >>> round9.add_votes({"carol": 71, "eve": 29})
+    >>> rounds.append(round9)
+
+    >>> round10 = BallotBox(method=FirstPastPostVoting)
+    >>> round10.add_votes({"dave": 39, "eve": 61})
+    >>> rounds.append(round10)
+
+    >>> bb = BallotBox(method=CopelandVoting)
+    >>> bb.get_winner(rounds)
+    [(2, 'alice')]
+
+
