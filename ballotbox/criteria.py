@@ -1,7 +1,13 @@
 from zope.interface import Interface
 
 
-class IMajorityCriterion(Interface):
+class ICriterion(Interfac):
+    """
+    The base interface for all criteria.
+    """
+
+
+class IMajorityCriterion(ICriterion):
     """
     The majority criterion is a single-winner voting system criterion, used to
     compare such systems. The criterion states that "if one candidate is
@@ -25,7 +31,7 @@ class IMajorityCriterion(Interface):
     """
 
 
-class IMajorityLoserCriterion(Interface):
+class IMajorityLoserCriterion(ICriterion):
     """
     The majority loser criterion is a criterion to evaluate single-winner
     voting systems. The criterion states that if a majority of voters prefers
@@ -66,7 +72,7 @@ class IMutualMajorityCriterion(MajorityCriterion, MajorityLoserCriterion):
     """
 
 
-class IMonotonicityCriterion(Interface):
+class IMonotonicityCriterion(ICriterion):
     """
     The monotonicity criterion is a voting system criterion used to analyze
     both single and multiple winner voting systems. A voting system is
@@ -121,7 +127,7 @@ class IMonotonicityCriterion(Interface):
     """
 
 
-class IConsistencyCriterion(Interface):
+class IConsistencyCriterion(ICriterion):
     """
     A voting system is consistent if, when the electorate is divided
     arbitrarily into two (or more) parts and separate elections in each part
@@ -215,7 +221,7 @@ class ICondorcetLoserCriterion(MajorityLoserCriterion):
     """
 
 
-class IIndependenceOfIrrelevantAlternativesCriterion(Interface):
+class IIndependenceOfIrrelevantAlternativesCriterion(ICriterion):
     """
     In voting systems, independence of irrelevant alternatives is often
     interpreted as, if one candidate (X) wins the election, and a new
@@ -241,7 +247,7 @@ class IIndependenceOfIrrelevantAlternativesCriterion(Interface):
     """
 
 
-class IIndependenceOfClonesCriterion(Interface):
+class IIndependenceOfClonesCriterion(ICriterion):
     """
     In voting systems theory, the independence of clones criterion measures an
     election method's robustness to strategic nomination. Nicolaus Tideman
@@ -274,7 +280,7 @@ class IIndependenceOfClonesCriterion(Interface):
     """
 
 
-class IReversalSymmetryCriterion(Interface):
+class IReversalSymmetryCriterion(ICriterion):
     """
     Reversal symmetry is a voting system criterion which requires that if
     candidate A is the unique winner, and each voter's individual preferences
@@ -288,7 +294,7 @@ class IReversalSymmetryCriterion(Interface):
     """
 
 
-class IPolynomialTimeCriterion(Interface):
+class IPolynomialTimeCriterion(ICriterion):
     """
     Can the winner be calculated in a runtime that is polynomial in the number
     of candidates and the number of voters?
@@ -300,7 +306,7 @@ class IPolynomialTimeCriterion(Interface):
     """
 
 
-class ISummabilityCriterion(Interface):
+class ISummabilityCriterion(ICriterion):
     """
     How much information must be transmitted from each polling station to a
     central location in order to determine the winner?
@@ -312,7 +318,7 @@ class ISummabilityCriterion(Interface):
     """
 
 
-class IAllowsEqualRankingsCriterion(Interface):
+class IAllowsEqualRankingsCriterion(ICriterion):
     """
     Can a voter choose whether to rank any two candidates equally at any
     position on the ballot?
@@ -322,14 +328,14 @@ class IAllowsEqualRankingsCriterion(Interface):
     """
 
 
-class IAllowsLaterPreferencesCriterion(Interface):
+class IAllowsLaterPreferencesCriterion(ICriterion):
     """
     Can a voter indicate different levels of support through ranking or rating
     candidates?
     """
 
 
-class ILaterNoHarmCriterion(Interface):
+class ILaterNoHarmCriterion(ICriterion):
     """
     The later-no-harm criterion is a voting system criterion formulated by
     Douglas Woodall. The criterion is satisfied if, in any election, a voter
