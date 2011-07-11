@@ -1,0 +1,6 @@
+recursive-include docs *.txt
+recursive-include ballotbox *.py
+include README
+include LICENSE
+include TODO
+
