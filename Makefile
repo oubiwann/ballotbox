@@ -34,6 +34,10 @@ check-docs:
 	"from ballotbox.testing import suite;suite.runDocTests('$(files)');"
 
 
+check-dist:
+	@echo "Need to fill this in ..."
+
+
 check: build check-docs
 	trial ballotbox
 

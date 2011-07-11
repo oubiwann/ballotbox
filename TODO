@@ -7,3 +7,11 @@ Copy multi-doctest file test suite code from txULS/soom to here.
 Add a new docs/methods directory and a file for each voting method.
 
 Add doctests for each voting method.
+
+Add a make target that tests the source dist:
+
+ * create a temp dir
+
+ * untar the dist there
+
+ * run the unit tests and doctests against that directory
