@@ -1,4 +1,7 @@
-class MajorityCriterion(object):
+from zope.interface import Interface
+
+
+class IMajorityCriterion(Interface):
     """
     The majority criterion is a single-winner voting system criterion, used to
     compare such systems. The criterion states that "if one candidate is
@@ -22,7 +25,7 @@ class MajorityCriterion(object):
     """
 
 
-class MajorityLoserCriterion(object):
+class IMajorityLoserCriterion(Interface):
     """
     The majority loser criterion is a criterion to evaluate single-winner
     voting systems. The criterion states that if a majority of voters prefers
@@ -44,7 +47,7 @@ class MajorityLoserCriterion(object):
     """
 
 
-class MutualMajorityCriterion(MajorityCriterion, MajorityLoserCriterion):
+class IMutualMajorityCriterion(MajorityCriterion, MajorityLoserCriterion):
     """
     The mutual majority criterion is a criterion used to compare voting
     systems. It is also known as the majority criterion for solid coalitions
@@ -63,7 +66,7 @@ class MutualMajorityCriterion(MajorityCriterion, MajorityLoserCriterion):
     """
 
 
-class MonotonicityCriterion(object):
+class IMonotonicityCriterion(Interface):
     """
     The monotonicity criterion is a voting system criterion used to analyze
     both single and multiple winner voting systems. A voting system is
@@ -118,7 +121,7 @@ class MonotonicityCriterion(object):
     """
 
 
-class ConsistencyCriterion(object):
+class IConsistencyCriterion(Interface):
     """
     A voting system is consistent if, when the electorate is divided
     arbitrarily into two (or more) parts and separate elections in each part
@@ -134,7 +137,7 @@ class ConsistencyCriterion(object):
     """
 
 
-class ParticipationCriterion(
+class IParticipationCriterion(
     """
     The participation criterion is a voting system criterion. It is also known
     as the "no show paradox". It has been defined as follows:
@@ -163,7 +166,7 @@ class ParticipationCriterion(
     """
 
 
-class CondorcetCriterion(MajorityCriterion):
+class ICondorcetCriterion(MajorityCriterion):
     """
     The Condorcet candidate or Condorcet winner of an election is the candidate
     who, when compared with every other candidate, is preferred by more voters.
@@ -184,7 +187,7 @@ class CondorcetCriterion(MajorityCriterion):
     """
 
 
-class CondorcetLoserCriterion(MajorityLoserCriterion):
+class ICondorcetLoserCriterion(MajorityLoserCriterion):
     """
     In single-winner voting system theory, the Condorcet loser criterion is a
     measure for differentiating voting systems. It implies the majority loser
@@ -209,4 +212,152 @@ class CondorcetLoserCriterion(MajorityLoserCriterion):
     Noncompliant methods include: plurality voting, supplementary voting, Sri
     Lankan contingent voting, approval voting, range voting, Bucklin voting and
     minimax Condorcet.
+    """
+
+
+class IIndependenceOfIrrelevantAlternativesCriterion(Interface):
+    """
+    In voting systems, independence of irrelevant alternatives is often
+    interpreted as, if one candidate (X) wins the election, and a new
+    alternative (Y) is added, only X or Y will win the election.
+
+    Approval voting and range voting satisfy the independence of irrelevant
+    alternatives criterion. Another cardinal system, cumulative voting, does
+    not satisfy the criterion.
+
+    An anecdote which illustrates a violation of this property has been
+    attributed to Sidney Morgenbesser:
+
+        After finishing dinner, Sidney Morgenbesser decides to order dessert.
+        The waitress tells him he has two choices: apple pie and blueberry pie.
+        Sidney orders the apple pie. After a few minutes the waitress returns
+        and says that they also have cherry pie at which point Morgenbesser
+        says "In that case I'll have the blueberry pie."
+
+    All voting systems have some degree of inherent susceptibility to strategic
+    nomination considerations. Some regard these considerations as less serious
+    unless the voting system specifically fails the (easier to satisfy)
+    independence of clones criterion.
+    """
+
+
+class IIndependenceOfClonesCriterion(Interface):
+    """
+    In voting systems theory, the independence of clones criterion measures an
+    election method's robustness to strategic nomination. Nicolaus Tideman
+    first formulated the criterion, which states that the addition of a
+    candidate identical to one already present in an election will not cause
+    the winner of the election to change.
+
+    In some systems, the introduction of a clone tends to divide support
+    between the similar candidates, worsening all their chances. In some other
+    systems, the presence of a clone tends to reduce support for dissimilar
+    candidates, improving the chances of one (or more) of the similar
+    candidates. In yet other systems, the introduction of clones does not
+    significantly affect the chances of similar candidates. There are further
+    systems where the effect of the introduction of clones depends on the
+    distribution of other votes.
+
+    Elections methods that fail independence of clones can either be clone
+    negative (the addition of an identical candidate decreases a candidate’s
+    chance of winning) or clone positive (the reverse). The Borda count is an
+    example of a clone positive method. Plurality is an example of a clone
+    negative method because of vote-splitting.
+
+    Instant-runoff voting, approval voting and range voting meet the
+    independence of clones criterion. Some election methods that comply with
+    the Condorcet criterion such as Ranked pairs and Schulze[2] also meet
+    independence of clones.
+
+    The Borda count, Minimax, two-round system, Bucklin voting and plurality
+    fail the independence of clones criterion.
+    """
+
+
+class IReversalSymmetryCriterion(Interface):
+    """
+    Reversal symmetry is a voting system criterion which requires that if
+    candidate A is the unique winner, and each voter's individual preferences
+    are inverted, then A must not be elected. Methods that satisfy reversal
+    symmetry include Borda count, the Kemeny-Young method, and the Schulze
+    method. Methods that fail include Bucklin voting, instant-runoff voting and
+    Condorcet methods that fail the Condorcet loser criterion such as Minimax.
+
+    For cardinal voting systems which can be meaningfully reversed, approval
+    voting and range voting satisfy the criterion.
+    """
+
+
+class IPolynomialTimeCriterion(Interface):
+    """
+    Can the winner be calculated in a runtime that is polynomial in the number
+    of candidates and the number of voters?
+
+    Problems for which a polynomial time algorithm exists belong to the
+    complexity class IP, which is central in the field of computational
+    complexity theory. Cobham's thesis states that polynomial time is a synonym
+    for "tractable", "feasible", "efficient", or "fast".
+    """
+
+
+class ISummabilityCriterion(Interface):
+    """
+    How much information must be transmitted from each polling station to a
+    central location in order to determine the winner?
+
+    This is expressed as an order function of the number of candidates N.
+    Slower-growing functions such as O(N) or O(N2) make for easier counting,
+    while faster-growing functions such as O(N!) might make it harder to catch
+    fraud by election administrators.
+    """
+
+
+class IAllowsEqualRankingsCriterion(Interface):
+    """
+    Can a voter choose whether to rank any two candidates equally at any
+    position on the ballot?
+
+    This can reduce the prevalence of spoiled ballots due to overvotes, and can
+    give a less-dishonest alternative to some tactical voting strategies.
+    """
+
+
+class IAllowsLaterPreferencesCriterion(Interface):
+    """
+    Can a voter indicate different levels of support through ranking or rating
+    candidates?
+    """
+
+
+class ILaterNoHarmCriterion(Interface):
+    """
+    The later-no-harm criterion is a voting system criterion formulated by
+    Douglas Woodall. The criterion is satisfied if, in any election, a voter
+    giving an additional ranking or positive rating to a less preferred
+    candidate cannot cause a more preferred candidate to lose.
+
+    Single transferable vote (including Instant Runoff Voting and Contingent
+    vote), Minimax Condorcet (pairwise opposition variant which does not
+    satisfy the Condorcet Criterion), and Descending Solid Coalitions, a
+    variant of Woodall's Descending Acquiescing Coalitions rule, satisfy the
+    later-no-harm criterion.
+
+    However, if a method permits incomplete ranking of candidates, and if a
+    majority of initial round votes is required for election, it cannot satisfy
+    Later-no-harm, because a lower preference vote cast may create a majority
+    for that lower preference, whereas if the vote was not cast, the election
+    could fail, proceed to a runoff, repeated ballot or other process, and the
+    favored candidate could possibly win.
+
+    Approval voting, Borda count, Range voting, Schulze method and Bucklin
+    voting do not satisfy later-no-harm. The Condorcet criterion is
+    incompatible with later-no-harm.
+
+    When Plurality is being used to fill two or more seats in a single district
+    (Plurality-at-large) it fails later-no-harm.
+
+    The later-no-harm criterion is by definition inapplicable to any voting
+    system in which a voter is not allowed to express more than one choice,
+    including plurality voting, the system most commonly used in Canada, India,
+    the UK, and the USA.
     """
