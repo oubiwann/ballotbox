@@ -34,7 +34,7 @@ check-docs:
 	"from ballotbox.testing import suite;suite.runDocTests('$(files)');"
 
 
-check: build check-docs check-patterns
+check: build check-docs
 	trial ballotbox
 
 

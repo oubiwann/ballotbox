@@ -1,0 +1,10 @@
+=====
+Usage
+=====
+
+Voting method A
+---------------
+
+adf asdf asdf::
+
+    >>> from ballotbox import votingmethod
