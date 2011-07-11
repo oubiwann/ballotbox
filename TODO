@@ -2,9 +2,9 @@
 subclassing these in the voting methods, they would implement them. This will
 make zope.interface a dependency.
 
-Copy multi-doctest file test suite code from txULS/soom to here.
+[DONE] Copy multi-doctest file test suite code from txULS/soom to here.
 
-Add a new docs/methods directory and a file for each voting method.
+[DONE] Add a new docs/methods directory and a file for each voting method.
 
 Add doctests for each voting method.
 

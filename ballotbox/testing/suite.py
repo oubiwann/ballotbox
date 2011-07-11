@@ -86,7 +86,7 @@ def runDocTests(path):
     runner.run(unittest.TestSuite(suites))
 
 
-def runPatterns(path):
+def assembleAndRunDocTests(path):
     """
     This function assembles all the pattern files together into a single
     temporary file. This is done in order to avoide entering duplicate code in

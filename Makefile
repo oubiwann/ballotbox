@@ -34,11 +34,15 @@ check-docs:
 	"from ballotbox.testing import suite;suite.runDocTests('$(files)');"
 
 
+check-votingdocs: files = "docs/methods/*/*.txt"
+check-votingdocs:
+	@python -c \
+	"from ballotbox.testing import suite;suite.runDocTests('$(files)');"
 check-dist:
 	@echo "Need to fill this in ..."
 
 
-check: build check-docs
+check: build check-docs check-votingdocs
 	trial ballotbox
 
 

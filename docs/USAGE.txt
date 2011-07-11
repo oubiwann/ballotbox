@@ -2,9 +2,38 @@
 Usage
 =====
 
-Voting method A
+
+Simple Majority
 ---------------
 
-adf asdf asdf::
+Simple majority rule voting is mostly useful for binary decision. Below are
+some examples involving just two choices::
 
-    >>> from ballotbox import votingmethod
+    >>> from ballotbox.ballot import BallotBox
+    >>> from ballotbox.singlewinner.simple import MajorityRuleVoting
+
+    >>> bb = BallotBox(method=MajorityRuleVoting)
+    >>> bb.add_votes({"alice": 10000, "bob": 5000})
+    >>> bb.get_winner()
+    [(10000, 'alice')]
+
+    >>> bb = BallotBox(method=MajorityRuleVoting)
+    >>> bb.add_votes({"bob": 5000, "carol": 5001})
+    >>> bb.get_winner()
+    [(5001, 'carol')]
+
+This method breaks down with ties and is not guaranteed to work with more than
+two choices::
+
+    >>> bb = BallotBox(method=MajorityRuleVoting)
+    >>> bb.add_votes({"alice": 8000, "carol": 8000})
+    >>> bb.get_winner()
+    []
+
+No result is returned. Likewise for edge cases with more than two candidates::
+
+    >>> bb = BallotBox(method=MajorityRuleVoting)
+    >>> bb.add_votes({"alice": 5000, "bob": 4000, "carol": 3000})
+    >>> bb.get_winner()
+    []
+
