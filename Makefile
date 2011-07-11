@@ -46,11 +46,11 @@ commit-msg: check
 	bzr commit --file=MSG
 
 
-push: commit
+push: commit clean
 	bzr push lp:ballotbox
 
 
-push-msg: commit-msg
+push-msg: commit-msg clean
 	bzr push lp:ballotbox
 	mv MSG MSG.backup
 	touch MSG
