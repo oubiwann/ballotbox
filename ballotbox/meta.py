@@ -1,0 +1,8 @@
+display_name = "ballotbox"
+library_name = "ballotbox"
+version = "0.1"
+author = "Duncan McGreggor"
+author_email = "oubiwann@gmail.com"
+license = "LGPLv3"
+url = "http://launchpad.net/ballotbox"
+description = """A Python library for voting algorithms."""
