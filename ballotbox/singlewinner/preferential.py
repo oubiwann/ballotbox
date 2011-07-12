@@ -36,6 +36,53 @@ class CopelandVoting(object):
         return [results[0]]
 
 
+class KemenyYoungVoting(object):
+    """
+    The Kemeny-Young method is a voting system that uses preferential ballots
+    and pairwise comparison counts to identify the most popular choices in an
+    election. It is a Condorcet method because if there is a Condorcet winner,
+    it will always be ranked as the most popular choice.
+
+    This method assigns a score for each possible sequence, where each sequence
+    considers which choice might be most popular, which choice might be
+    second-most popular, which choice might be third-most popular, and so on
+    down to which choice might be least-popular. The sequence that has the
+    highest score is the winning sequence, and the first choice in the winning
+    sequence is the most popular choice. (As explained below, ties can occur at
+    any ranking level.)
+
+    The Kemeny-Young method is also known as the Kemeny rule, VoteFair
+    popularity ranking, the maximum likelihood method, and the median relation.
+
+    The Kemeny-Young method uses preferential ballots on which voters rank
+    choices according to their order of preference. A voter is allowed to rank
+    more than one choice at the same preference level. Unranked choices are
+    usually interpreted as least-preferred.
+
+    Another way to view the ordering is that it is the one which minimizes the
+    sum of the Kendall tau distances (bubble sort distance) to the voters'
+    lists.
+
+    Kemeny-Young calculations are usually done in two steps. The first step is
+    to create a matrix or table that counts pairwise voter preferences. The
+    second step is to test all possible rankings, calculate a score for each
+    such ranking, and compare the scores. Each ranking score equals the sum of
+    the pairwise counts that apply to that ranking.
+
+    The ranking that has the largest score is identified as the overall
+    ranking. (If more than one ranking has the same largest score, all these
+    possible rankings are tied, and typically the overall ranking involves one
+    or more ties.)
+    """
+    implements = (IVotingMethod, ICondorcetCriterion)
+
+    def get_winner(self, ignored, ballotboxes, position_count=1):
+        data = {}
+        for box in ballotboxes:
+
+    return results[0:position_count]
+
+
 class MajorityCriterion(object):
     """
     The majority criterion is a single-winner voting system criterion, used to
@@ -120,41 +167,4 @@ class DodgsonVoting(object):
     """
 
 
-class KemeyYoungVoting(object):
-    """
-    The Kemeny-Young method is a voting system that uses preferential ballots
-    and pairwise comparison counts to identify the most popular choices in an
-    election. It is a Condorcet method because if there is a Condorcet winner,
-    it will always be ranked as the most popular choice.
 
-    This method assigns a score for each possible sequence, where each sequence
-    considers which choice might be most popular, which choice might be
-    second-most popular, which choice might be third-most popular, and so on
-    down to which choice might be least-popular. The sequence that has the
-    highest score is the winning sequence, and the first choice in the winning
-    sequence is the most popular choice. (As explained below, ties can occur at
-    any ranking level.)
-
-    The Kemeny-Young method is also known as the Kemeny rule, VoteFair
-    popularity ranking, the maximum likelihood method, and the median relation.
-
-    The Kemeny-Young method uses preferential ballots on which voters rank
-    choices according to their order of preference. A voter is allowed to rank
-    more than one choice at the same preference level. Unranked choices are
-    usually interpreted as least-preferred.
-
-    Another way to view the ordering is that it is the one which minimizes the
-    sum of the Kendall tau distances (bubble sort distance) to the voters'
-    lists.
-
-    Kemeny-Young calculations are usually done in two steps. The first step is
-    to create a matrix or table that counts pairwise voter preferences. The
-    second step is to test all possible rankings, calculate a score for each
-    such ranking, and compare the scores. Each ranking score equals the sum of
-    the pairwise counts that apply to that ranking.
-
-    The ranking that has the largest score is identified as the overall
-    ranking. (If more than one ranking has the same largest score, all these
-    possible rankings are tied, and typically the overall ranking involves one
-    or more ties.)
-    """

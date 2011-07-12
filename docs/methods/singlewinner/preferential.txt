@@ -54,3 +54,29 @@ competing for one seat::
     [(2, 'alice')]
 
 
+The Kemeny-Young Method
+-----------------------
+
+Here is a fictional vote to move the capital of Tennessee. The inhabitants of
+each city want to have the capital as close to their city as possible, if their
+city doesn't actually win. Each voter will list their preferences for the state
+capital from most desired to least.
+
+The candidates for the capital are:
+
+ * Memphis, the state's largest city, with 42% of the voters, but located far
+   from the other cities
+
+ * Nashville, with 26% of the voters, near the center of Tennessee
+
+ * Knoxville, with 17% of the voters
+
+ * Chattanooga, with 15% of the voters
+
+Here the code that determines the winner::
+
+    >>> from ballotbox.singlewinner.preferential import KemenyYoungVoting
+
+    >>> bb = BallotBox(method=CopelandVoting)
+    >>> bb.get_winner(rounds)
+    [(2, 'alice')]
