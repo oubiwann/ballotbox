@@ -73,10 +73,125 @@ The candidates for the capital are:
 
  * Chattanooga, with 15% of the voters
 
-Here the code that determines the winner::
+The three nearest cities to Memphis, closest first, are: Nashville,
+Chattanooga, and Knoxville -- so Memphis voters would vote in that order. For
+Nashville, the nearest are: Chattanooga, Knoxville, and Memphis. For
+Chattanooga they are: Knoxville, Nashville, and Memphis. For Knoxville they
+are: Chattanooga, Nashville, and Memphis.
+
+So this means that 42% of the voters would make their list of city preferences
+in the first order given. Similarly, 26%, 17%, and 15% would do the same for
+the remaining, respectively.
+
+Here the code that determines the winner (we'll just assume that there are 100
+people living in Tennessee)::
 
     >>> from ballotbox.singlewinner.preferential import KemenyYoungVoting
 
-    >>> bb = BallotBox(method=CopelandVoting)
-    >>> bb.get_winner(rounds)
-    [(2, 'alice')]
+We're going to use JSON so that we can have dict data be keys in other dicts::
+
+    >>> import json
+
+    >>> bb = BallotBox(method=KemenyYoungVoting)
+    >>> preference = {
+    ...   "Memphis": 1, "Nashville": 2, "Chattanooga": 3, "Knoxville": 4}
+    >>> bb.add_vote({json.dumps(preference): 42})
+    >>> preference = {
+    ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 3, "Memphis": 4}
+    >>> bb.add_vote({json.dumps(preference): 26})
+    >>> preference = {
+    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 3, "Memphis": 4}
+    >>> bb.add_vote({json.dumps(preference): 15})
+    >>> preference = {
+    ...   "Knoxville": 1, "Chattanooga": 2, "Nashville": 3, "Memphis": 4}
+    >>> bb.add_vote({json.dumps(preference): 17})
+    >>> bb.get_winner()
+    [(393, (u'Nashville', u'Chattanooga', u'Knoxville', u'Memphis'))]
+
+We can also return runners' up, etc.::
+
+    >>> bb.get_winner(position_count=2)
+    [(393, (u'Nashville', u'Chattanooga', u'Knoxville', u'Memphis')), (377, (u'Nashville', u'Chattanooga', u'Memphis', u'Knoxville'))]
+    >>> bb.get_winner(position_count=3)
+    [(393, (u'Nashville', u'Chattanooga', u'Knoxville', u'Memphis')), (377, (u'Nashville', u'Chattanooga', u'Memphis', u'Knoxville')), (361, (u'Nashville', u'Memphis', u'Chattanooga', u'Knoxville'))]
+
+Here's a listing of all possibilities and their ranks::
+
+    >>> for rank, preference in bb.get_winner(position_count=24):
+    ...   print " ".join(preference), rank
+    Nashville Chattanooga Knoxville Memphis 393
+    Nashville Chattanooga Memphis Knoxville 377
+    Nashville Memphis Chattanooga Knoxville 361
+    Chattanooga Nashville Knoxville Memphis 357
+    Memphis Nashville Chattanooga Knoxville 345
+    Chattanooga Nashville Memphis Knoxville 341
+    Nashville Knoxville Chattanooga Memphis 327
+    Chattanooga Memphis Nashville Knoxville 325
+    Chattanooga Knoxville Nashville Memphis 321
+    Nashville Knoxville Memphis Chattanooga 311
+    Memphis Chattanooga Nashville Knoxville 309
+    Chattanooga Knoxville Memphis Nashville 305
+    Nashville Memphis Knoxville Chattanooga 295
+    Knoxville Nashville Chattanooga Memphis 291
+    Chattanooga Memphis Knoxville Nashville 289
+    Memphis Nashville Knoxville Chattanooga 279
+    Knoxville Nashville Memphis Chattanooga 275
+    Memphis Chattanooga Knoxville Nashville 273
+    Knoxville Memphis Nashville Chattanooga 259
+    Knoxville Chattanooga Nashville Memphis 255
+    Memphis Knoxville Nashville Chattanooga 243
+    Knoxville Chattanooga Memphis Nashville 239
+    Knoxville Memphis Chattanooga Nashville 223
+    Memphis Knoxville Chattanooga Nashville 207
+
+Now, we could have a situation where there was a tie or equal preference
+between to choices. For instance, in the following example, Everyone in
+Chattanooga equally preferred Knoxville and Nashville::
+
+    >>> bb = BallotBox(method=KemenyYoungVoting)
+    >>> preference1 = {
+    ...   "Memphis": 1, "Nashville": 2, "Chattanooga": 3, "Knoxville": 4}
+    >>> preference2 = {
+    ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 3, "Memphis": 4}
+    >>> preference3 = {
+    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 2, "Memphis": 3}
+    >>> preference4 = {
+    ...   "Knoxville": 1, "Chattanooga": 2, "Nashville": 3, "Memphis": 4}
+    >>> bb.add_votes({
+    ... json.dumps(preference1): 42, json.dumps(preference2): 26, 
+    ... json.dumps(preference3): 15, json.dumps(preference4): 17})
+    >>> bb.get_winner()
+    [(393, (u'Nashville', u'Chattanooga', u'Knoxville', u'Memphis'))]
+
+Here's a listing of all possibilities and their ranks::
+
+    >>> for rank, preference in bb.get_winner(position_count=24):
+    ...   print " ".join(preference), rank
+    Nashville Chattanooga Knoxville Memphis 393
+    Nashville Chattanooga Memphis Knoxville 377
+    Nashville Memphis Chattanooga Knoxville 361
+    Chattanooga Nashville Knoxville Memphis 357
+    Memphis Nashville Chattanooga Knoxville 345
+    Chattanooga Nashville Memphis Knoxville 341
+    Nashville Knoxville Chattanooga Memphis 327
+    Chattanooga Memphis Nashville Knoxville 325
+    Nashville Knoxville Memphis Chattanooga 311
+    Memphis Chattanooga Nashville Knoxville 309
+    Chattanooga Knoxville Nashville Memphis 306
+    Nashville Memphis Knoxville Chattanooga 295
+    Chattanooga Knoxville Memphis Nashville 290
+    Memphis Nashville Knoxville Chattanooga 279
+    Knoxville Nashville Chattanooga Memphis 276
+    Chattanooga Memphis Knoxville Nashville 274
+    Knoxville Nashville Memphis Chattanooga 260
+    Memphis Chattanooga Knoxville Nashville 258
+    Knoxville Memphis Nashville Chattanooga 244
+    Knoxville Chattanooga Nashville Memphis 240
+    Memphis Knoxville Nashville Chattanooga 228
+    Knoxville Chattanooga Memphis Nashville 224
+    Knoxville Memphis Chattanooga Nashville 208
+    Memphis Knoxville Chattanooga Nashville 192
+
+Note that the rank amounts changed from the previous example as a result of the
+tie in preference3.
+

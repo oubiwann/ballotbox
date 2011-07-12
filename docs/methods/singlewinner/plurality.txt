@@ -20,10 +20,3 @@ First Past the Post
     >>> bb.get_winner(position_count=3)
     [(5000, 'carol'), (4000, 'alice'), (3000, 'bob')]
 
-
-Two-Round Voting
-----------------
-
-    >>> from ballotbox.singlewinner.plurality import TwoRoundVoting
-
-    >>> bb = BallotBox(method=TwoRoundVoting)

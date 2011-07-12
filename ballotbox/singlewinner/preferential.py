@@ -1,3 +1,6 @@
+import itertools
+import json
+
 from zope.interface import implements
 
 from ballotbox.criteria import ICondorcetCriterion
@@ -76,11 +79,47 @@ class KemenyYoungVoting(object):
     """
     implements = (IVotingMethod, ICondorcetCriterion)
 
-    def get_winner(self, ignored, ballotboxes, position_count=1):
-        data = {}
-        for box in ballotboxes:
+    def build_lookup(self, ballotbox):
+        pairs = {}
+        for preferences, votes in ballotbox.items():
+            preference_list = json.loads(preferences).items()
+            # let's get a list of options for later use
+            if not self.preference_options:
+                self.preference_options = [
+                    option for option, rank in preference_list]
+            for index, preference1 in enumerate(preference_list[:-1]):
+                for preference2 in preference_list[index + 1:]:
+                    option1, rank1 = preference1
+                    option2, rank2 = preference2
+                    # remember, first choice is "1" and that's a lower number
+                    # than "2", so the lower the amount, the greater the
+                    # preference
+                    if rank1 < rank2:
+                        lookup = "%s > %s" % (option1, option2)
+                    elif rank2 < rank1:
+                        lookup = "%s > %s" % (option2, option1)
+                    else:
+                        lookup = "%s = %s" % (option1, option2)
+                    pairs.setdefault(lookup, 0)
+                    pairs[lookup] += votes
+        return pairs
 
-    return results[0:position_count]
+    def get_ranks(self, lookup):
+        ranks = []
+        for possibility in itertools.permutations(self.preference_options):
+            rank = 0
+            for index, option1 in enumerate(possibility[:-1]):
+                for option2 in possibility[index + 1:]:
+                    key = "%s > %s" % (option1, option2)
+                    rank += lookup[key]
+            ranks.append((rank, possibility))
+        return sorted(ranks, reverse=True)
+
+    def get_winner(self, ballotbox, position_count=1):
+        self.preference_options = []
+        lookup = self.build_lookup(ballotbox)
+        results = self.get_ranks(lookup)
+        return results[0:position_count]
 
 
 class MajorityCriterion(object):
