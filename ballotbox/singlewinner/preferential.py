@@ -2,7 +2,8 @@ import itertools
 
 from zope.interface import implements
 
-from ballotbox.criteria import ICondorcetCriterion
+from ballotbox.criteria import (
+    ICondorcetCriterion, IMajorityCriterion, IPluralityCriterion)
 from ballotbox.iballot import IVotingMethod
 
 
@@ -20,7 +21,7 @@ class CopelandVoting(object):
     Copeland requires a Smith set containing at least five candidates to give a
     clear winner unless two or more candidates tie in pairwise comparisons.
     """
-    implements = (IVotingMethod, ICondorcetCriterion)
+    implements(IVotingMethod, ICondorcetCriterion)
 
     def get_winner(self, ignored, ballotboxes):
         data = {}
@@ -38,7 +39,49 @@ class CopelandVoting(object):
         return [results[0]]
 
 
-class KemenyYoungVoting(object):
+class PairWiseBase(object):
+    """
+    This is a base class to hold common code for implementations that utilize
+    pair-wise comparisons.
+    """
+    def __init__(self):
+        self.preference_options = []
+        self.lookup = {}
+
+    def build_lookup(self, ballotbox):
+        pairs = {}
+        for preferences, votes in ballotbox.items():
+            preference_list = preferences.items()
+            # let's get a list of options for later use
+            if not self.preference_options:
+                self.preference_options = [
+                    option for option, rank in preference_list]
+            for index, preference1 in enumerate(preference_list[:-1]):
+                for preference2 in preference_list[index + 1:]:
+                    option1, rank1 = preference1
+                    option2, rank2 = preference2
+                    # remember, first choice is "1" and that's a lower number
+                    # than "2", so the lower the amount, the greater the
+                    # preference
+                    if rank1 < rank2:
+                        lookup = "%s > %s" % (option1, option2)
+                    elif rank2 < rank1:
+                        lookup = "%s > %s" % (option2, option1)
+                    else:
+                        lookup = "%s = %s" % (option1, option2)
+                    pairs.setdefault(lookup, 0)
+                    pairs[lookup] += votes
+        return pairs
+
+    def _compare(self, candidate1, candidate2):
+        comparison = "%s > %s" % (candidate1, candidate2)
+        anti_comparison = "%s > %s" % (candidate2, candidate1)
+        votes_for = self.lookup[comparison]
+        votes_against = self.lookup[anti_comparison]
+        return [(votes_for, comparison), (votes_against, anti_comparison)]
+
+
+class KemenyYoungVoting(PairWiseBase):
     """
     The Kemeny-Young method is a voting system that uses preferential ballots
     and pairwise comparison counts to identify the most popular choices in an
@@ -76,54 +119,94 @@ class KemenyYoungVoting(object):
     possible rankings are tied, and typically the overall ranking involves one
     or more ties.)
     """
-    implements = (IVotingMethod, ICondorcetCriterion)
+    implements(IVotingMethod, ICondorcetCriterion)
 
-    def build_lookup(self, ballotbox):
-        pairs = {}
-        for preferences, votes in ballotbox.items():
-            preference_list = preferences.items()
-            # let's get a list of options for later use
-            if not self.preference_options:
-                self.preference_options = [
-                    option for option, rank in preference_list]
-            for index, preference1 in enumerate(preference_list[:-1]):
-                for preference2 in preference_list[index + 1:]:
-                    option1, rank1 = preference1
-                    option2, rank2 = preference2
-                    # remember, first choice is "1" and that's a lower number
-                    # than "2", so the lower the amount, the greater the
-                    # preference
-                    if rank1 < rank2:
-                        lookup = "%s > %s" % (option1, option2)
-                    elif rank2 < rank1:
-                        lookup = "%s > %s" % (option2, option1)
-                    else:
-                        lookup = "%s = %s" % (option1, option2)
-                    pairs.setdefault(lookup, 0)
-                    pairs[lookup] += votes
-        return pairs
-
-    def get_ranks(self, lookup):
+    def get_ranks(self):
         ranks = []
         for possibility in itertools.permutations(self.preference_options):
             rank = 0
             for index, option1 in enumerate(possibility[:-1]):
                 for option2 in possibility[index + 1:]:
                     key = "%s > %s" % (option1, option2)
-                    rank += lookup[key]
+                    rank += self.lookup[key]
             ranks.append((rank, possibility))
         return sorted(ranks, reverse=True)
 
     def get_winner(self, ballotbox, position_count=1):
         self.preference_options = []
-        lookup = self.build_lookup(ballotbox)
-        results = self.get_ranks(lookup)
+        self.lookup = self.build_lookup(ballotbox)
+        results = self.get_ranks()
         return results[0:position_count]
 
 
-class MinimaxVoting(object):
+class MinimaxWinningVoting(PairWiseBase):
     """
-    Minimax is often considered[by whom?] to be the simplest of the Condorcet
+    The number of voters ranking x above y, but only when this score exceeds
+    the number of voters ranking y above x. If not, then the score for x
+    against y is zero. This is sometimes called winning votes.
+
+    See the MinimaxVoting factory function's docstring for more information.
+    """
+    implements(
+        IVotingMethod, ICondorcetCriterion, IMajorityCriterion,
+        IPluralityCriterion)
+
+    def get_winner(self, ballotbox, candidate1, candidate2):
+        self.lookup = self.build_lookup(ballotbox)
+        [(votes_for, comparison), 
+         (votes_against, anti_comparison)] = self._compare(
+            candidate1, candidate2)
+        rank = votes_for - votes_against
+        if rank < 0:
+            votes_for = 0
+        return [(votes_for, comparison)]
+
+
+class MinimaxMarginsVoting(PairWiseBase):
+    """
+    The number of voters ranking x above y minus the number of voters ranking y
+    above x. This is called using margins.
+
+    See the MinimaxVoting factory function's docstring for more information.
+    """
+    implements(
+        IVotingMethod, ICondorcetCriterion, IMajorityCriterion)
+
+    def get_winner(self, ballotbox, candidate1, candidate2):
+        self.lookup = self.build_lookup(ballotbox)
+        [(votes_for, comparison), 
+         (votes_against, anti_comparison)] = self._compare(
+            candidate1, candidate2)
+        rank = votes_for - votes_against
+        return [(rank, comparison)]
+
+
+class MinimaxPairwiseOppositionVoting(PairWiseBase):
+    """
+    The number of voters ranking x above y, regardless of whether more voters
+    rank x above y or vice versa. This interpretation is sometimes called
+    pairwise opposition.
+
+    See the MinimaxVoting factory function's docstring for more information.
+    """
+    implements(IVotingMethod)
+
+    def get_winner(self, ballotbox, candidate1, candidate2):
+        self.lookup = self.build_lookup(ballotbox)
+        [(votes_for, comparison), 
+         (votes_against, anti_comparison)] = self._compare(
+            candidate1, candidate2)
+        return [(votes_for, comparison)]
+
+
+def MinimaxVoting(mode="winning votes"):
+    """
+    The 'mode' parameter can be one of the following:
+        * "winning votes"
+        * "margins"
+        * "pairwise opposition"
+
+    Minimax is often considered to be the simplest of the Condorcet
     methods. It is also known as the Simpson-Kramer method, and the successive
     reversal method.
 
@@ -142,17 +225,16 @@ class MinimaxVoting(object):
     The score for candidate x against y can be defined as:
 
         1. The number of voters ranking x above y, but only when this score
-           exceeds
+           exceeds the number of voters ranking y above x. If not, then the
+           score for x against y is zero. This is sometimes called winning
+           votes.
 
-        2. the number of voters ranking y above x. If not, then the score for x
-           against y is zero. This is sometimes called winning votes.
+        2. The number of voters ranking x above y minus the number of voters
+           ranking y above x. This is called using margins.
 
-        3. The number of voters ranking x above y minus the number of voters
-        ranking y above x. This is called using margins.
-
-    The number of voters ranking x above y, regardless of whether more voters
-    rank x above y or vice versa. This interpretation is sometimes called
-    pairwise opposition.
+        3. The number of voters ranking x above y, regardless of whether more
+           voters rank x above y or vice versa. This interpretation is
+           sometimes called pairwise opposition.
 
     When one of the first two interpretations is used, the method can be
     restated as: "Disregard the weakest pairwise defeat until one candidate is
@@ -171,22 +253,14 @@ class MinimaxVoting(object):
     criterion, which means that by listing additional, lower preferences in
     one's ranking, one cannot cause a preferred candidate to lose.
     """
-    def get_winning_votes(self, ballotbox):
-        pass
-
-    def get_margins(self, ballotbox):
-        pass
-
-    def get_pairwise_opposition(self, ballotbox):
-        pass
-
-    def get_winner(self, ballotbox, mode="winning votes"):
-        """
-        The 'mode' parameter can be one of the following:
-            * "winning votes"
-            * "margins"
-            * "pairwise opposition"
-        """
+    if mode == "winning votes":
+        return MinimaxWinningVoting()
+    elif mode == "margins":
+        return MinimaxMarginsVoting()
+    elif mode == "pairwise opposition":
+        return MinimaxPairwiseOppositionVoting()
+    else:
+        raise ValueError("Unknown mode '%'" % mode)
 
 
 class BucklinVoting(object):

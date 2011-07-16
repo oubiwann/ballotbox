@@ -10,12 +10,12 @@ class BallotBox(dict):
     """
     implements(IBallotBox)
 
-    def __init__(self, method=None, *args, **kwargs):
-        super(BallotBox, self).__init__(*args, **kwargs)
+    def __init__(self, method=None, data={}, *args, **kwargs):
+        super(BallotBox, self).__init__(data)
         # instantiate the voting method class
         if method:
             #import pdb;pdb.set_trace()
-            method = method()
+            method = method(*args, **kwargs)
         self.method = method
 
     def _is_string(self, data):

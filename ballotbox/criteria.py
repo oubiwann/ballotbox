@@ -143,6 +143,42 @@ class IConsistencyCriterion(ICriterion):
     """
 
 
+class IPluralityCriterion(ICriterion):
+    """
+    Plurality criterion is a voting system criterion devised by Douglas R.
+    Woodall for ranked voting methods with incomplete ballots. It is stated as
+    follows:
+
+    If the number of ballots ranking A as the first preference is greater than
+    the number of ballots on which another candidate B is given any preference,
+    then A's probability of winning must be no less than B's.
+
+    This criterion is trivially satisfied by rank ballot methods which require
+    voters to strictly rank all the candidates (and so do not allow
+    truncation). The Borda count is usually defined in this way.
+
+    Woodall has called the Plurality criterion "a rather weak property that
+    surely must hold in any real election", and noted that "every reasonable
+    electoral system seems to satisfy it." Most proposed methods do satisfy it,
+    including Plurality voting, IRV, Bucklin voting, and approval voting.
+
+    Among Condorcet methods which permit truncation, whether the Plurality
+    criterion is satisfied depends often on the measure of defeat strength.
+    When winning votes is used as the measure of defeat strength in methods
+    such as the Schulze method, Ranked Pairs, or Minimax, Plurality is
+    satisfied. Plurality is failed when margins is used. Minimax using pairwise
+    opposition also fails Plurality.
+
+    When truncation is permitted under Borda count, Plurality is satisfied when
+    no points are scored to truncated candidates, and ranked candidates receive
+    no fewer votes than if the truncated candidates had been ranked. If
+    truncated candidates are instead scored the average number of points that
+    would have been awarded to those candidates had they been strictly ranked,
+    or if Nauru's modified Borda count is used, the Plurality criterion is
+    failed.
+    """
+
+
 class IParticipationCriterion(ICriterion):
     """
     The participation criterion is a voting system criterion. It is also known

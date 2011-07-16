@@ -204,7 +204,83 @@ The Minmax voting method has three varieties:
 
  * pairwise opposition
 
-Let's take a look at these in order::
+Let's take a look at these in order, starting with the "winning votes" method::
 
     >>> from ballotbox.singlewinner.preferential import MinimaxVoting
 
+    >>> bb = BallotBox(method=MinimaxVoting, mode="winning votes")
+    >>> preference = {
+    ...   "Memphis": 1, "Nashville": 2, "Chattanooga": 3, "Knoxville": 4}
+    >>> bb.add_votes(preference, 42)
+    >>> preference = {
+    ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 3, "Memphis": 4}
+    >>> bb.add_votes(preference, 26)
+    >>> preference = {
+    ...   "Knoxville": 1, "Chattanooga": 2, "Nashville": 3, "Memphis": 4}
+    >>> bb.add_votes(preference, 17)
+    >>> preference = {
+    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 2, "Memphis": 3}
+    >>> bb.add_votes(preference, 15)
+
+    >>> bb.get_winner("Nashville", "Memphis")
+    [(58, 'Nashville > Memphis')]
+    >>> bb.get_winner("Memphis", "Nashville")
+    [(0, 'Memphis > Nashville')]
+    >>> bb.get_winner("Knoxville", "Chattanooga")
+    [(0, 'Knoxville > Chattanooga')]
+    >>> bb.get_winner("Chattanooga", "Knoxville")
+    [(83, 'Chattanooga > Knoxville')]
+    >>> bb.get_winner("Nashville", "Knoxville")
+    [(68, 'Nashville > Knoxville')]
+
+Next is the "margins" method::
+
+    >>> bb = BallotBox(method=MinimaxVoting, mode="margins")
+    >>> preference1 = {
+    ...   "Memphis": 1, "Nashville": 2, "Chattanooga": 3, "Knoxville": 4}
+    >>> preference2 = {
+    ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 3, "Memphis": 4}
+    >>> preference3 = {
+    ...   "Knoxville": 1, "Chattanooga": 2, "Nashville": 3, "Memphis": 4}
+    >>> preference4 = {
+    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 2, "Memphis": 3}
+    >>> bb.batch_votes([
+    ... (preference1, 42), (preference2, 26), (preference3, 17), 
+    ... (preference4, 15)])
+
+    >>> bb.get_winner("Nashville", "Memphis")
+    [(16, 'Nashville > Memphis')]
+    >>> bb.get_winner("Memphis", "Nashville")
+    [(-16, 'Memphis > Nashville')]
+    >>> bb.get_winner("Knoxville", "Chattanooga")
+    [(-66, 'Knoxville > Chattanooga')]
+    >>> bb.get_winner("Chattanooga", "Knoxville")
+    [(66, 'Chattanooga > Knoxville')]
+    >>> bb.get_winner("Nashville", "Knoxville")
+    [(51, 'Nashville > Knoxville')]
+
+Finally, we have the "pairwise opposition" method::
+
+    >>> bb = BallotBox(method=MinimaxVoting, mode="pairwise opposition")
+    >>> preference1 = {
+    ...   "Memphis": 1, "Nashville": 2, "Chattanooga": 3, "Knoxville": 4}
+    >>> preference2 = {
+    ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 3, "Memphis": 4}
+    >>> preference3 = {
+    ...   "Knoxville": 1, "Chattanooga": 2, "Nashville": 3, "Memphis": 4}
+    >>> preference4 = {
+    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 2, "Memphis": 3}
+    >>> bb.batch_votes([
+    ... (preference1, 42), (preference2, 26), (preference3, 17), 
+    ... (preference4, 15)])
+
+    >>> bb.get_winner("Nashville", "Memphis")
+    [(58, 'Nashville > Memphis')]
+    >>> bb.get_winner("Memphis", "Nashville")
+    [(42, 'Memphis > Nashville')]
+    >>> bb.get_winner("Knoxville", "Chattanooga")
+    [(17, 'Knoxville > Chattanooga')]
+    >>> bb.get_winner("Chattanooga", "Knoxville")
+    [(83, 'Chattanooga > Knoxville')]
+    >>> bb.get_winner("Nashville", "Knoxville")
+    [(68, 'Nashville > Knoxville')]
