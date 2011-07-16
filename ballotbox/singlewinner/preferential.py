@@ -1,5 +1,4 @@
 import itertools
-import json
 
 from zope.interface import implements
 
@@ -82,7 +81,7 @@ class KemenyYoungVoting(object):
     def build_lookup(self, ballotbox):
         pairs = {}
         for preferences, votes in ballotbox.items():
-            preference_list = json.loads(preferences).items()
+            preference_list = preferences.items()
             # let's get a list of options for later use
             if not self.preference_options:
                 self.preference_options = [
@@ -122,49 +121,72 @@ class KemenyYoungVoting(object):
         return results[0:position_count]
 
 
-class MajorityCriterion(object):
+class MinimaxVoting(object):
     """
-    The majority criterion is a single-winner voting system criterion, used to
-    compare such systems. The criterion states that "if one candidate is
-    preferred by a majority (more than 50%) of voters, then that candidate must
-    win".
+    Minimax is often considered[by whom?] to be the simplest of the Condorcet
+    methods. It is also known as the Simpson-Kramer method, and the successive
+    reversal method.
 
-    Some methods that comply with this criterion include any Condorcet method,
-    instant-runoff voting, and Bucklin voting.
+    Minimax selects the candidate for whom the greatest pairwise score for
+    another candidate against him is the least such score among all candidates.
 
-    Some methods which give weight to preference strength fail the majority
-    criterion, while others pass it. Thus the Borda count and range voting fail
-    the majority criterion, while the Majority judgment passes it. The
-    application of the majority criterion to methods which cannot provide a
-    full ranking, such as approval voting, is disputed.
+    Formally, let score(X,Y) denote the pairwise score for X against Y. Then
+    the candidate, W selected by minimax (aka the winner) is given by:
 
-    These methods that fail the majority criterion may offer a strategic
-    incentive to voters to bullet vote, i.e., vote for one candidate only, not
-    providing any information about their possible support for other
-    candidates, since, with such methods, these additional votes may aid their
-    less-preferred.
+        W = argminX(maxYscore(Y,X))
+
+    When it is permitted to rank candidates equally, or to not rank all the
+    candidates, three interpretations of the rule are possible. When voters
+    must rank all the candidates, all three rules are equivalent.
+
+    The score for candidate x against y can be defined as:
+
+        1. The number of voters ranking x above y, but only when this score
+           exceeds
+
+        2. the number of voters ranking y above x. If not, then the score for x
+           against y is zero. This is sometimes called winning votes.
+
+        3. The number of voters ranking x above y minus the number of voters
+        ranking y above x. This is called using margins.
+
+    The number of voters ranking x above y, regardless of whether more voters
+    rank x above y or vice versa. This interpretation is sometimes called
+    pairwise opposition.
+
+    When one of the first two interpretations is used, the method can be
+    restated as: "Disregard the weakest pairwise defeat until one candidate is
+    unbeaten." An "unbeaten" candidate possesses a maximum score against him
+    which is zero or negative.
+
+    Minimax using winning votes or margins satisfies Condorcet and the majority
+    criterion, but not the Smith criterion, mutual majority criterion,
+    independence of clones criterion, or Condorcet loser criterion. When
+    winning votes is used, Minimax also satisfies the Plurality criterion.
+
+    When the pairwise opposition interpretation is used, minimax also does not
+    satisfy the Condorcet criterion. However, when equal-ranking is permitted,
+    there is never an incentive to put one's first-choice candidate below
+    another one on one's ranking. It also satisfies the Later-no-harm
+    criterion, which means that by listing additional, lower preferences in
+    one's ranking, one cannot cause a preferred candidate to lose.
     """
+    def get_winning_votes(self, ballotbox):
+        pass
 
+    def get_margins(self, ballotbox):
+        pass
 
-class CondorcetCriterion(MajorityCriterion):
-    """
-    The Condorcet candidate or Condorcet winner of an election is the candidate
-    who, when compared with every other candidate, is preferred by more voters.
-    Informally, the Condorcet winner is the person who would win a
-    two-candidate election against the other candidate. A Condorcet winner will
-    not always exist in a given set of votes, which is known as Condorcet's
-    voting paradox. When voters identify candidates on a left-to-right axis and
-    always prefer candidates closer to themselves, a Condorcet winner always
-    exists.
+    def get_pairwise_opposition(self, ballotbox):
+        pass
 
-    A voting system satisfies the Condorcet criterion if it chooses the
-    Condorcet winner when one exists. Any method conforming to the Condorcet
-    criterion is known as a Condorcet method.
-
-    It is named after the 18th century mathematician and philosopher Marie Jean
-
-    Antoine Nicolas Caritat, the Marquis de Condorcet.
-    """
+    def get_winner(self, ballotbox, mode="winning votes"):
+        """
+        The 'mode' parameter can be one of the following:
+            * "winning votes"
+            * "margins"
+            * "pairwise opposition"
+        """
 
 
 class BucklinVoting(object):

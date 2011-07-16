@@ -10,43 +10,43 @@ competing for one seat::
 
     >>> rounds = []
     >>> round1 = BallotBox(method=FirstPastPostVoting)
-    >>> round1.add_votes({"alice": 41, "bob": 59})
+    >>> round1.batch_votes([("alice", 41), ("bob", 59)])
     >>> rounds.append(round1)
 
     >>> round2 = BallotBox(method=FirstPastPostVoting)
-    >>> round2.add_votes({"alice": 71, "carol": 29})
+    >>> round2.batch_votes([("alice", 71), ("carol", 29)])
     >>> rounds.append(round2)
 
     >>> round3 = BallotBox(method=FirstPastPostVoting)
-    >>> round3.add_votes({"alice": 61, "dave": 39})
+    >>> round3.batch_votes([("alice", 61), ("dave", 39)])
     >>> rounds.append(round3)
 
     >>> round4 = BallotBox(method=FirstPastPostVoting)
-    >>> round4.add_votes({"alice": 71, "eve": 0})
+    >>> round4.batch_votes([("alice", 71), ("eve", 0)])
     >>> rounds.append(round4)
 
     >>> round5 = BallotBox(method=FirstPastPostVoting)
-    >>> round5.add_votes({"bob": 30, "carol": 60})
+    >>> round5.batch_votes([("bob", 30), ("carol", 60)])
     >>> rounds.append(round5)
 
     >>> round6 = BallotBox(method=FirstPastPostVoting)
-    >>> round6.add_votes({"bob": 30, "dave": 70})
+    >>> round6.batch_votes([("bob", 30), ("dave", 70)])
     >>> rounds.append(round6)
 
     >>> round7 = BallotBox(method=FirstPastPostVoting)
-    >>> round7.add_votes({"bob": 59, "eve": 41})
+    >>> round7.batch_votes([("bob", 59), ("eve", 41)])
     >>> rounds.append(round7)
 
     >>> round8 = BallotBox(method=FirstPastPostVoting)
-    >>> round8.add_votes({"carol": 60, "dave": 10})
+    >>> round8.batch_votes([("carol", 60), ("dave", 10)])
     >>> rounds.append(round8)
 
     >>> round9 = BallotBox(method=FirstPastPostVoting)
-    >>> round9.add_votes({"carol": 71, "eve": 29})
+    >>> round9.batch_votes([("carol", 71), ("eve", 29)])
     >>> rounds.append(round9)
 
     >>> round10 = BallotBox(method=FirstPastPostVoting)
-    >>> round10.add_votes({"dave": 39, "eve": 61})
+    >>> round10.batch_votes([("dave", 39), ("eve", 61)])
     >>> rounds.append(round10)
 
     >>> bb = BallotBox(method=CopelandVoting)
@@ -74,10 +74,10 @@ The candidates for the capital are:
  * Chattanooga, with 15% of the voters
 
 The three nearest cities to Memphis, closest first, are: Nashville,
-Chattanooga, and Knoxville -- so Memphis voters would vote in that order. For
-Nashville, the nearest are: Chattanooga, Knoxville, and Memphis. For
-Chattanooga they are: Knoxville, Nashville, and Memphis. For Knoxville they
-are: Chattanooga, Nashville, and Memphis.
+Chattanooga, and Knoxville -- so Memphis voters would vote in that order (with
+Memphis first, of course). For Nashville, the nearest are: Chattanooga,
+Knoxville, and Memphis. For Chattanooga they are: Knoxville, Nashville, and
+Memphis. For Knoxville they are: Chattanooga, Nashville, and Memphis.
 
 So this means that 42% of the voters would make their list of city preferences
 in the first order given. Similarly, 26%, 17%, and 15% would do the same for
@@ -88,23 +88,20 @@ people living in Tennessee)::
 
     >>> from ballotbox.singlewinner.preferential import KemenyYoungVoting
 
-We're going to use JSON so that we can have dict data be keys in other dicts::
-
-    >>> import json
-
     >>> bb = BallotBox(method=KemenyYoungVoting)
     >>> preference = {
     ...   "Memphis": 1, "Nashville": 2, "Chattanooga": 3, "Knoxville": 4}
-    >>> bb.add_vote({json.dumps(preference): 42})
+    >>> bb.add_votes(preference, 42)
     >>> preference = {
     ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 3, "Memphis": 4}
-    >>> bb.add_vote({json.dumps(preference): 26})
-    >>> preference = {
-    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 3, "Memphis": 4}
-    >>> bb.add_vote({json.dumps(preference): 15})
+    >>> bb.add_votes(preference, 26)
     >>> preference = {
     ...   "Knoxville": 1, "Chattanooga": 2, "Nashville": 3, "Memphis": 4}
-    >>> bb.add_vote({json.dumps(preference): 17})
+    >>> bb.add_votes(preference, 17)
+    >>> preference = {
+    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 3, "Memphis": 4}
+    >>> bb.add_votes(preference, 15)
+
     >>> bb.get_winner()
     [(393, (u'Nashville', u'Chattanooga', u'Knoxville', u'Memphis'))]
 
@@ -154,12 +151,12 @@ Chattanooga equally preferred Knoxville and Nashville::
     >>> preference2 = {
     ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 3, "Memphis": 4}
     >>> preference3 = {
-    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 2, "Memphis": 3}
-    >>> preference4 = {
     ...   "Knoxville": 1, "Chattanooga": 2, "Nashville": 3, "Memphis": 4}
-    >>> bb.add_votes({
-    ... json.dumps(preference1): 42, json.dumps(preference2): 26, 
-    ... json.dumps(preference3): 15, json.dumps(preference4): 17})
+    >>> preference4 = {
+    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 2, "Memphis": 3}
+    >>> bb.batch_votes([
+    ... (preference1, 42), (preference2, 26), (preference3, 17), 
+    ... (preference4, 15)])
     >>> bb.get_winner()
     [(393, (u'Nashville', u'Chattanooga', u'Knoxville', u'Memphis'))]
 
@@ -194,4 +191,20 @@ Here's a listing of all possibilities and their ranks::
 
 Note that the rank amounts changed from the previous example as a result of the
 tie in preference3.
+
+
+Minmax Voting
+-------------
+
+The Minmax voting method has three varieties:
+
+ * winning votes
+
+ * margins
+
+ * pairwise opposition
+
+Let's take a look at these in order::
+
+    >>> from ballotbox.singlewinner.preferential import MinimaxVoting
 

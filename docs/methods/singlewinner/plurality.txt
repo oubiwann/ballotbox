@@ -10,7 +10,7 @@ First Past the Post
     >>> from ballotbox.singlewinner.plurality import FirstPastPostVoting
 
     >>> bb = BallotBox(method=FirstPastPostVoting)
-    >>> bb.add_votes({"alice": 4000, "bob": 3000, "carol": 5000})
+    >>> bb.batch_votes([("alice", 4000), ("bob", 3000), ("carol", 5000)])
     >>> bb.get_winner(position_count=1)
     [(5000, 'carol')]
 
