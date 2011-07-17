@@ -9,20 +9,15 @@ BallotBox Documentation
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    docs/README
    docs/INSTALL
    Quick Start <docs/USAGE>
+   Voting Methods <docs/methods/VOTINGMETHODS>
    docs/LICENSE
    docs/TODO
    Release History <docs/HISTORY>
-
-.. toctree::
-   :glob:
-
-   docs/methods/*
-   docs/methods/*/*
 
 .. toctree::
    :maxdepth: 2

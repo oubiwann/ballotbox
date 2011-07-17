@@ -1,0 +1,9 @@
+Voting Methods:
+
+.. toctree::
+   :maxdepth: 2
+
+   singlewinner/simple
+   singlewinner/plurality
+   singlewinner/preferential
+   singlewinner/rated

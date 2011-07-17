@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Documentation &mdash; BallotBox v0.1 documentation</title>
+    <title>Voting Methods &mdash; BallotBox v0.1 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="BallotBox v0.1 documentation" href="../../index.html" />
-    <link rel="next" title="Interfaces" href="INTERFACES.html" />
-    <link rel="prev" title="Changes" href="../HISTORY.html" /> 
+    <link rel="next" title="Simple Voting" href="singlewinner/simple.html" />
+    <link rel="prev" title="Usage" href="../USAGE.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,10 +37,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="INTERFACES.html" title="Interfaces"
+          <a href="singlewinner/simple.html" title="Simple Voting"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../HISTORY.html" title="Changes"
+          <a href="../USAGE.html" title="Usage"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">BallotBox v0.1 documentation</a> &raquo;</li> 
       </ul>
@@ -51,15 +51,27 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="api-documentation">
-<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="voting-methods">
+<h1>Voting Methods<a class="headerlink" href="#voting-methods" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="INTERFACES.html">Interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="BALLOT.html">Ballot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="SINGLEWINNER.html">Single-Winner</a></li>
-<li class="toctree-l1"><a class="reference internal" href="MULTIWINNER.html">Multi-Winner</a></li>
-<li class="toctree-l1"><a class="reference internal" href="OTHER.html">Other</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlewinner/simple.html">Simple Voting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="singlewinner/simple.html#majority-rule">Majority Rule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="singlewinner/plurality.html">Plurality Voting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="singlewinner/plurality.html#first-past-the-post">First Past the Post</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="singlewinner/preferential.html">Preferential</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="singlewinner/preferential.html#copeland-s-method">Copeland&#8217;s Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlewinner/preferential.html#the-kemeny-young-method">The Kemeny-Young Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlewinner/preferential.html#minmax-voting">Minmax Voting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlewinner/preferential.html#borda-voting">Borda Voting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="singlewinner/preferential.html#nanson-voting">Nanson Voting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="singlewinner/rated.html">Rated Voting</a></li>
 </ul>
 </div>
 </div>
@@ -71,14 +83,14 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../HISTORY.html"
-                        title="previous chapter">Changes</a></p>
+  <p class="topless"><a href="../USAGE.html"
+                        title="previous chapter">Usage</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="INTERFACES.html"
-                        title="next chapter">Interfaces</a></p>
+  <p class="topless"><a href="singlewinner/simple.html"
+                        title="next chapter">Simple Voting</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/docs/api/API.txt"
+    <li><a href="../../_sources/docs/methods/VOTINGMETHODS.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -108,10 +120,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="INTERFACES.html" title="Interfaces"
+          <a href="singlewinner/simple.html" title="Simple Voting"
              >next</a> |</li>
         <li class="right" >
-          <a href="../HISTORY.html" title="Changes"
+          <a href="../USAGE.html" title="Usage"
              >previous</a> |</li>
         <li><a href="../../index.html">BallotBox v0.1 documentation</a> &raquo;</li> 
       </ul>

@@ -3,8 +3,8 @@ Simple Voting
 =============
 
 
-Simple Majority
----------------
+Majority Rule
+-------------
 
 Simple majority rule voting is mostly useful for binary decision. Below are
 some examples involving just two choices::

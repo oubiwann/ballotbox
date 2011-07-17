@@ -23,6 +23,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="BallotBox v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Voting Methods" href="../VOTINGMETHODS.html" />
     <link rel="next" title="Rated Voting" href="rated.html" />
     <link rel="prev" title="Plurality Voting" href="plurality.html" /> 
   </head>
@@ -42,7 +43,8 @@
         <li class="right" >
           <a href="plurality.html" title="Plurality Voting"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../../index.html">BallotBox v0.1 documentation</a> &raquo;</li> 
+        <li><a href="../../../index.html">BallotBox v0.1 documentation</a> &raquo;</li>
+          <li><a href="../VOTINGMETHODS.html" accesskey="U">Voting Methods</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -467,10 +469,13 @@ Kemeny-Young method:</p>
 </div>
 <div class="section" id="nanson-voting">
 <h2>Nanson Voting<a class="headerlink" href="#nanson-voting" title="Permalink to this headline">¶</a></h2>
+<p>By using the Nanson method, we end up with a condorcet Borda count. It uses
+the same mechanisms as Borda, but it retallies votes after eliminating
+candidates who rank lower than the average Borda count in each round. This
+results in exactly one winner:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.singlewinner.preferential</span> <span class="kn">import</span> <span class="n">NansonVoting</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">NansonVoting</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">NansonVoting</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
 <span class="gp">... </span>  <span class="s">&quot;Alice&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Carol&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&quot;Bob&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&quot;Dave&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
@@ -483,9 +488,8 @@ Kemeny-Young method:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
 <span class="gp">... </span>  <span class="s">&quot;Dave&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Carol&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&quot;Bob&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&quot;Alice&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
 <span class="go">[(205, u&#39;Carol&#39;)]</span>
 </pre></div>
 </div>
@@ -553,7 +557,8 @@ Kemeny-Young method:</p>
         <li class="right" >
           <a href="plurality.html" title="Plurality Voting"
              >previous</a> |</li>
-        <li><a href="../../../index.html">BallotBox v0.1 documentation</a> &raquo;</li> 
+        <li><a href="../../../index.html">BallotBox v0.1 documentation</a> &raquo;</li>
+          <li><a href="../VOTINGMETHODS.html" >Voting Methods</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
