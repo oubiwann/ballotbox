@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="BallotBox v0.1 documentation" href="../../../index.html" />
-    <link rel="next" title="API Documentation" href="../../API.html" />
+    <link rel="next" title="API Documentation" href="../../api/API.html" />
     <link rel="prev" title="Rated Voting" href="rated.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../API.html" title="API Documentation"
+          <a href="../../api/API.html" title="API Documentation"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="rated.html" title="Rated Voting"
@@ -61,12 +61,12 @@ some examples involving just two choices:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.singlewinner.simple</span> <span class="kn">import</span> <span class="n">MajorityRuleVoting</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">10000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">5000</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
 <span class="go">[(10000, &#39;alice&#39;)]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">5000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">5001</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mi">5001</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
 <span class="go">[(5001, &#39;carol&#39;)]</span>
 </pre></div>
@@ -74,14 +74,14 @@ some examples involving just two choices:</p>
 <p>This method breaks down with ties and is not guaranteed to work with more than
 two choices:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">8000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">8000</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mi">8000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mi">8000</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
 <span class="go">[]</span>
 </pre></div>
 </div>
 <p>No result is returned. Likewise for edge cases with more than two candidates:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">5000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">4000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">3000</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mi">4000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
 <span class="go">[]</span>
 </pre></div>
@@ -107,7 +107,7 @@ two choices:</p>
   <p class="topless"><a href="rated.html"
                         title="previous chapter">Rated Voting</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../../API.html"
+  <p class="topless"><a href="../../api/API.html"
                         title="next chapter">API Documentation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
@@ -141,7 +141,7 @@ two choices:</p>
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../API.html" title="API Documentation"
+          <a href="../../api/API.html" title="API Documentation"
              >next</a> |</li>
         <li class="right" >
           <a href="rated.html" title="Rated Voting"

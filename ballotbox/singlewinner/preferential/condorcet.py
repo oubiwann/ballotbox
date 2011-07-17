@@ -5,7 +5,7 @@ from zope.interface import implements
 from ballotbox.criteria import (
     ICondorcetCriterion, IMajorityCriterion, ISmithCriterion)
 from ballotbox.iballot import IVotingMethod
-from ballotbox.singlewinner.preferential import base
+from ballotbox.singlewinner.preferential import base, borda
 
 
 class CopelandVoting(object):
@@ -98,11 +98,55 @@ class KemenyYoungVoting(base.PairWiseBase):
         return results[0:position_count]
 
 
-class NansonVoting(object):
+class NansonVoting(borda.StandardBordaVoting):
     """
+    The Nanson method is based on the original work of the mathematician Edward
+    J. Nanson.
+
+    Nanson's method eliminates those choices from a Borda count tally that are
+    at or below the average Borda count score, then the ballots are retallied
+    as if the remaining candidates were exclusively on the ballot. This process
+    is repeated if necessary until a single winner remains.
+    
+    The Nanson method and the Baldwin method satisfy the Condorcet criterion:
+    since Borda always gives any existing Condorcet winner more than the
+    average Borda points, the Condorcet winner will never be eliminated. They
+    do not satisfy the independence of irrelevant alternatives criterion, the
+    monotonicity criterion, the participation criterion, the consistency
+    criterion and the independence of clones criterion, while they do satisfy
+    the majority criterion, the mutual majority criterion, the Condorcet loser
+    criterion, and the Smith criterion. The Nanson method satisfies reversal
+    symmetry, while the Baldwin method violates reversal symmetry.
+
+    Nanson's method was used in city elections in the U.S. town of Marquette,
+    Michigan in the 1920s. It was formally used by the Anglican Diocese of
+    Melbourne and in the election of members of the University Council of the
+    University of Adelaide. It was used by the University of Melbourne until
+    1983.
     """
     implements(
         IVotingMethod, IMajorityCriterion, ISmithCriterion)
+
+    def iterate(self, ballotbox):
+        klass = ballotbox.__class__
+        new_ballotbox = klass(method=self.__class__)
+        counts = self.get_counts(ballotbox)
+        points = [count for count, candidate in counts]
+        average = sum(points)/float(len(counts))
+        dropped = [candidate for count, candidate in counts if count < average]
+        for preferences, votes in ballotbox.items():
+            new_preferences = {}
+            for candidate, rank in preferences.items():
+                if candidate not in dropped:
+                    new_preferences[candidate] = rank
+            new_ballotbox.add_votes(new_preferences, votes)
+        return new_ballotbox            
+        
+    def get_winner(self, ballotbox):
+        self.candidate_count = self.get_candidate_count(ballotbox)
+        while len(ballotbox.keys()[0].keys()) > 1:
+            ballotbox = self.iterate(ballotbox)
+        return self.get_counts(ballotbox)
 
 
 class BaldwinVoting(object):

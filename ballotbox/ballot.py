@@ -67,8 +67,7 @@ class BallotBox(dict):
         D.iterkeys() -> an iterator over the keys of D.
         """
         for key in super(BallotBox, self).iterkeys():
-            key = self._decode(key)
-            yield json.loads(key)
+            yield self._decode(key)
 
     def update(self, vote):
         """

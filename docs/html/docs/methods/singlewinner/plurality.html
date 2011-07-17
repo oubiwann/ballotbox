@@ -60,16 +60,16 @@
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">4000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">3000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">5000</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">position_count</span><span class="o">=</span><span class="mf">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mi">4000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mi">3000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">position_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">[(5000, &#39;carol&#39;)]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">position_count</span><span class="o">=</span><span class="mf">2</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">position_count</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">[(5000, &#39;carol&#39;), (4000, &#39;alice&#39;)]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">position_count</span><span class="o">=</span><span class="mf">3</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">position_count</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="go">[(5000, &#39;carol&#39;), (4000, &#39;alice&#39;), (3000, &#39;bob&#39;)]</span>
 </pre></div>
 </div>

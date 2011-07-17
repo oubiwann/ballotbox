@@ -422,3 +422,26 @@ Kemeny-Young method::
 
     >>> bb.get_winner()
     [(388, (u'Alice', u'Carol', u'Bob', u'Dave'))]
+
+
+Nanson Voting
+-------------
+
+    >>> from ballotbox.singlewinner.preferential import NansonVoting
+
+    >>> bb = BallotBox(method=NansonVoting)
+    >>> preference = {
+    ...   "Alice": 1, "Carol": 2, "Bob": 3, "Dave": 4}
+    >>> bb.add_votes(preference, 51)
+    >>> preference = {
+    ...   "Carol": 1, "Bob": 2, "Dave": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 5)
+    >>> preference = {
+    ...   "Bob": 1, "Carol": 2, "Dave": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 23)
+    >>> preference = {
+    ...   "Dave": 1, "Carol": 2, "Bob": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 21)
+
+    >>> bb.get_winner()
+    [(205, u'Carol')]
