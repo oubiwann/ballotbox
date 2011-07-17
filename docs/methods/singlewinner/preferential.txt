@@ -338,3 +338,83 @@ Here are the results using the fractional Borda count::
 
     >>> bb.get_winner()
     [(57.666666666666664, u'Nashville')]
+
+Here are the results using a truncated Borda count::
+
+    >>> bb = BallotBox(method=BordaVoting, mode="truncated")
+    >>> preference = {
+    ...   "Memphis": 1, "Nashville": 2, "Chattanooga": 0, "Knoxville": 0}
+    >>> bb.add_votes(preference, 42)
+    >>> preference = {
+    ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 0, "Memphis": 0}
+    >>> bb.add_votes(preference, 26)
+    >>> preference = {
+    ...   "Knoxville": 1, "Chattanooga": 2, "Nashville": 3, "Memphis": 0}
+    >>> bb.add_votes(preference, 17)
+    >>> preference = {
+    ...   "Chattanooga": 1, "Knoxville": 0, "Nashville": 0, "Memphis": 0}
+    >>> bb.add_votes(preference, 15)
+
+    >>> bb.get_winner()
+    [(179, u'Nashville')]
+
+Here are the results using modified Borda count::
+
+    >>> bb = BallotBox(method=BordaVoting, mode="modified")
+    >>> preference = {
+    ...   "Memphis": 1, "Nashville": 2}
+    >>> bb.add_votes(preference, 42)
+    >>> preference = {
+    ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 3}
+    >>> bb.add_votes(preference, 26)
+    >>> preference = {
+    ...   "Knoxville": 1, "Chattanooga": 2}
+    >>> bb.add_votes(preference, 17)
+    >>> preference = {
+    ...   "Chattanooga": 1}
+    >>> bb.add_votes(preference, 15)
+
+    >>> bb.get_winner()
+    [(52, u'Nashville')]
+
+In the Borda count it is possible for a candidate who is the first preference
+of an absolute majority of voters to fail to be elected; this is because the
+Borda count affords greater importance to a voter's lower preferences than most
+other systems. Here is an example of that in action::
+
+    >>> bb = BallotBox(method=BordaVoting, mode="standard")
+    >>> preference = {
+    ...   "Alice": 1, "Carol": 2, "Bob": 3, "Dave": 4}
+    >>> bb.add_votes(preference, 51)
+    >>> preference = {
+    ...   "Carol": 1, "Bob": 2, "Dave": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 5)
+    >>> preference = {
+    ...   "Bob": 1, "Carol": 2, "Dave": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 23)
+    >>> preference = {
+    ...   "Dave": 1, "Carol": 2, "Bob": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 21)
+
+    >>> bb.get_winner()
+    [(205, u'Carol')]
+
+In most other systems, Alice would have been the winner. Take, for example, the
+Kemeny-Young method::
+
+    >>> bb = BallotBox(method=KemenyYoungVoting)
+    >>> preference = {
+    ...   "Alice": 1, "Carol": 2, "Bob": 3, "Dave": 4}
+    >>> bb.add_votes(preference, 51)
+    >>> preference = {
+    ...   "Carol": 1, "Bob": 2, "Dave": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 5)
+    >>> preference = {
+    ...   "Bob": 1, "Carol": 2, "Dave": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 23)
+    >>> preference = {
+    ...   "Dave": 1, "Carol": 2, "Bob": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 21)
+
+    >>> bb.get_winner()
+    [(388, (u'Alice', u'Carol', u'Bob', u'Dave'))]
