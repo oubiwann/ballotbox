@@ -1,0 +1,538 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Preferential &mdash; BallotBox v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="BallotBox v0.1 documentation" href="../../../index.html" />
+    <link rel="next" title="Rated Voting" href="rated.html" />
+    <link rel="prev" title="Plurality Voting" href="plurality.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rated.html" title="Rated Voting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="plurality.html" title="Plurality Voting"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../../index.html">BallotBox v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="preferential">
+<h1>Preferential<a class="headerlink" href="#preferential" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="copeland-s-method">
+<h2>Copeland&#8217;s Method<a class="headerlink" href="#copeland-s-method" title="Permalink to this headline">¶</a></h2>
+<p>Below is an example of an election that took place between 5 candidates
+competing for one seat:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.ballot</span> <span class="kn">import</span> <span class="n">BallotBox</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.singlewinner.plurality</span> <span class="kn">import</span> <span class="n">FirstPastPostVoting</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.singlewinner.preferential</span> <span class="kn">import</span> <span class="n">CopelandVoting</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round1</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round1</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">41</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">59</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">round1</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round2</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round2</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">71</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">29</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">round2</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round3</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round3</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">61</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;dave&quot;</span><span class="p">,</span> <span class="mf">39</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">round3</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round4</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round4</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">71</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;eve&quot;</span><span class="p">,</span> <span class="mf">0</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">round4</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round5</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round5</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">30</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">60</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">round5</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round6</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round6</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">30</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;dave&quot;</span><span class="p">,</span> <span class="mf">70</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">round6</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round7</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round7</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">59</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;eve&quot;</span><span class="p">,</span> <span class="mf">41</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">round7</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round8</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round8</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">60</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;dave&quot;</span><span class="p">,</span> <span class="mf">10</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">round8</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round9</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round9</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">71</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;eve&quot;</span><span class="p">,</span> <span class="mf">29</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">round9</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round10</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">FirstPastPostVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round10</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;dave&quot;</span><span class="p">,</span> <span class="mf">39</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;eve&quot;</span><span class="p">,</span> <span class="mf">61</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">round10</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">CopelandVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">rounds</span><span class="p">)</span>
+<span class="go">[(2, &#39;alice&#39;)]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-kemeny-young-method">
+<h2>The Kemeny-Young Method<a class="headerlink" href="#the-kemeny-young-method" title="Permalink to this headline">¶</a></h2>
+<p>Here is a fictional vote to move the capital of Tennessee. The inhabitants of
+each city want to have the capital as close to their city as possible, if their
+city doesn&#8217;t actually win. Each voter will list their preferences for the state
+capital from most desired to least.</p>
+<p>The candidates for the capital are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Memphis, the state&#8217;s largest city, with 42% of the voters, but located far
+from the other cities</li>
+<li>Nashville, with 26% of the voters, near the center of Tennessee</li>
+<li>Knoxville, with 17% of the voters</li>
+<li>Chattanooga, with 15% of the voters</li>
+</ul>
+</div></blockquote>
+<p>The three nearest cities to Memphis, closest first, are: Nashville,
+Chattanooga, and Knoxville &#8211; so Memphis voters would vote in that order (with
+Memphis first, of course). For Nashville, the nearest are: Chattanooga,
+Knoxville, and Memphis. For Chattanooga they are: Knoxville, Nashville, and
+Memphis. For Knoxville they are: Chattanooga, Nashville, and Memphis.</p>
+<p>So this means that 42% of the voters would make their list of city preferences
+in the first order given. Similarly, 26%, 17%, and 15% would do the same for
+the remaining, respectively.</p>
+<p>Here the code that determines the winner (we&#8217;ll just assume that there are 100
+people living in Tennessee):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.singlewinner.preferential</span> <span class="kn">import</span> <span class="n">KemenyYoungVoting</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">KemenyYoungVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">26</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">17</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">15</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[(393, (u&#39;Nashville&#39;, u&#39;Chattanooga&#39;, u&#39;Knoxville&#39;, u&#39;Memphis&#39;))]</span>
+</pre></div>
+</div>
+<p>We can also return runners&#8217; up, etc.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">position_count</span><span class="o">=</span><span class="mf">2</span><span class="p">)</span>
+<span class="go">[(393, (u&#39;Nashville&#39;, u&#39;Chattanooga&#39;, u&#39;Knoxville&#39;, u&#39;Memphis&#39;)), (377, (u&#39;Nashville&#39;, u&#39;Chattanooga&#39;, u&#39;Memphis&#39;, u&#39;Knoxville&#39;))]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">position_count</span><span class="o">=</span><span class="mf">3</span><span class="p">)</span>
+<span class="go">[(393, (u&#39;Nashville&#39;, u&#39;Chattanooga&#39;, u&#39;Knoxville&#39;, u&#39;Memphis&#39;)), (377, (u&#39;Nashville&#39;, u&#39;Chattanooga&#39;, u&#39;Memphis&#39;, u&#39;Knoxville&#39;)), (361, (u&#39;Nashville&#39;, u&#39;Memphis&#39;, u&#39;Chattanooga&#39;, u&#39;Knoxville&#39;))]</span>
+</pre></div>
+</div>
+<p>Here&#8217;s a listing of all possibilities and their ranks:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">preference</span> <span class="ow">in</span> <span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">position_count</span><span class="o">=</span><span class="mf">24</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">print</span> <span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">preference</span><span class="p">),</span> <span class="n">rank</span>
+<span class="go">Nashville Chattanooga Knoxville Memphis 393</span>
+<span class="go">Nashville Chattanooga Memphis Knoxville 377</span>
+<span class="go">Nashville Memphis Chattanooga Knoxville 361</span>
+<span class="go">Chattanooga Nashville Knoxville Memphis 357</span>
+<span class="go">Memphis Nashville Chattanooga Knoxville 345</span>
+<span class="go">Chattanooga Nashville Memphis Knoxville 341</span>
+<span class="go">Nashville Knoxville Chattanooga Memphis 327</span>
+<span class="go">Chattanooga Memphis Nashville Knoxville 325</span>
+<span class="go">Chattanooga Knoxville Nashville Memphis 321</span>
+<span class="go">Nashville Knoxville Memphis Chattanooga 311</span>
+<span class="go">Memphis Chattanooga Nashville Knoxville 309</span>
+<span class="go">Chattanooga Knoxville Memphis Nashville 305</span>
+<span class="go">Nashville Memphis Knoxville Chattanooga 295</span>
+<span class="go">Knoxville Nashville Chattanooga Memphis 291</span>
+<span class="go">Chattanooga Memphis Knoxville Nashville 289</span>
+<span class="go">Memphis Nashville Knoxville Chattanooga 279</span>
+<span class="go">Knoxville Nashville Memphis Chattanooga 275</span>
+<span class="go">Memphis Chattanooga Knoxville Nashville 273</span>
+<span class="go">Knoxville Memphis Nashville Chattanooga 259</span>
+<span class="go">Knoxville Chattanooga Nashville Memphis 255</span>
+<span class="go">Memphis Knoxville Nashville Chattanooga 243</span>
+<span class="go">Knoxville Chattanooga Memphis Nashville 239</span>
+<span class="go">Knoxville Memphis Chattanooga Nashville 223</span>
+<span class="go">Memphis Knoxville Chattanooga Nashville 207</span>
+</pre></div>
+</div>
+<p>Now, we could have a situation where there was a tie or equal preference
+between to choices. For instance, in the following example, Everyone in
+Chattanooga equally preferred Knoxville and Nashville:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">KemenyYoungVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference1</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference2</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference3</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference4</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([</span>
+<span class="gp">... </span><span class="p">(</span><span class="n">preference1</span><span class="p">,</span> <span class="mf">42</span><span class="p">),</span> <span class="p">(</span><span class="n">preference2</span><span class="p">,</span> <span class="mf">26</span><span class="p">),</span> <span class="p">(</span><span class="n">preference3</span><span class="p">,</span> <span class="mf">17</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">(</span><span class="n">preference4</span><span class="p">,</span> <span class="mf">15</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[(393, (u&#39;Nashville&#39;, u&#39;Chattanooga&#39;, u&#39;Knoxville&#39;, u&#39;Memphis&#39;))]</span>
+</pre></div>
+</div>
+<p>Here&#8217;s a listing of all possibilities and their ranks:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">preference</span> <span class="ow">in</span> <span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="n">position_count</span><span class="o">=</span><span class="mf">24</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">print</span> <span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">preference</span><span class="p">),</span> <span class="n">rank</span>
+<span class="go">Nashville Chattanooga Knoxville Memphis 393</span>
+<span class="go">Nashville Chattanooga Memphis Knoxville 377</span>
+<span class="go">Nashville Memphis Chattanooga Knoxville 361</span>
+<span class="go">Chattanooga Nashville Knoxville Memphis 357</span>
+<span class="go">Memphis Nashville Chattanooga Knoxville 345</span>
+<span class="go">Chattanooga Nashville Memphis Knoxville 341</span>
+<span class="go">Nashville Knoxville Chattanooga Memphis 327</span>
+<span class="go">Chattanooga Memphis Nashville Knoxville 325</span>
+<span class="go">Nashville Knoxville Memphis Chattanooga 311</span>
+<span class="go">Memphis Chattanooga Nashville Knoxville 309</span>
+<span class="go">Chattanooga Knoxville Nashville Memphis 306</span>
+<span class="go">Nashville Memphis Knoxville Chattanooga 295</span>
+<span class="go">Chattanooga Knoxville Memphis Nashville 290</span>
+<span class="go">Memphis Nashville Knoxville Chattanooga 279</span>
+<span class="go">Knoxville Nashville Chattanooga Memphis 276</span>
+<span class="go">Chattanooga Memphis Knoxville Nashville 274</span>
+<span class="go">Knoxville Nashville Memphis Chattanooga 260</span>
+<span class="go">Memphis Chattanooga Knoxville Nashville 258</span>
+<span class="go">Knoxville Memphis Nashville Chattanooga 244</span>
+<span class="go">Knoxville Chattanooga Nashville Memphis 240</span>
+<span class="go">Memphis Knoxville Nashville Chattanooga 228</span>
+<span class="go">Knoxville Chattanooga Memphis Nashville 224</span>
+<span class="go">Knoxville Memphis Chattanooga Nashville 208</span>
+<span class="go">Memphis Knoxville Chattanooga Nashville 192</span>
+</pre></div>
+</div>
+<p>Note that the rank amounts changed from the previous example as a result of the
+tie in preference3.</p>
+</div>
+<div class="section" id="minmax-voting">
+<h2>Minmax Voting<a class="headerlink" href="#minmax-voting" title="Permalink to this headline">¶</a></h2>
+<p>The Minmax voting method has three varieties:</p>
+<blockquote>
+<div><ul class="simple">
+<li>winning votes</li>
+<li>margins</li>
+<li>pairwise opposition</li>
+</ul>
+</div></blockquote>
+<p>Let&#8217;s take a look at these in order, starting with the &#8220;winning votes&#8221; method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.singlewinner.preferential</span> <span class="kn">import</span> <span class="n">MinimaxVoting</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MinimaxVoting</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;winning votes&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">26</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">17</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">15</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Nashville&quot;</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">)</span>
+<span class="go">[(58, &#39;Nashville &gt; Memphis&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Memphis&quot;</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">)</span>
+<span class="go">[(0, &#39;Memphis &gt; Nashville&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Knoxville&quot;</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">)</span>
+<span class="go">[(0, &#39;Knoxville &gt; Chattanooga&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Chattanooga&quot;</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">)</span>
+<span class="go">[(83, &#39;Chattanooga &gt; Knoxville&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Nashville&quot;</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">)</span>
+<span class="go">[(68, &#39;Nashville &gt; Knoxville&#39;)]</span>
+</pre></div>
+</div>
+<p>Next is the &#8220;margins&#8221; method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MinimaxVoting</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;margins&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference1</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference2</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference3</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference4</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([</span>
+<span class="gp">... </span><span class="p">(</span><span class="n">preference1</span><span class="p">,</span> <span class="mf">42</span><span class="p">),</span> <span class="p">(</span><span class="n">preference2</span><span class="p">,</span> <span class="mf">26</span><span class="p">),</span> <span class="p">(</span><span class="n">preference3</span><span class="p">,</span> <span class="mf">17</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">(</span><span class="n">preference4</span><span class="p">,</span> <span class="mf">15</span><span class="p">)])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Nashville&quot;</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">)</span>
+<span class="go">[(16, &#39;Nashville &gt; Memphis&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Memphis&quot;</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">)</span>
+<span class="go">[(-16, &#39;Memphis &gt; Nashville&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Knoxville&quot;</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">)</span>
+<span class="go">[(-66, &#39;Knoxville &gt; Chattanooga&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Chattanooga&quot;</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">)</span>
+<span class="go">[(66, &#39;Chattanooga &gt; Knoxville&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Nashville&quot;</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">)</span>
+<span class="go">[(51, &#39;Nashville &gt; Knoxville&#39;)]</span>
+</pre></div>
+</div>
+<p>Finally, we have the &#8220;pairwise opposition&#8221; method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MinimaxVoting</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;pairwise opposition&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference1</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference2</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference3</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference4</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([</span>
+<span class="gp">... </span><span class="p">(</span><span class="n">preference1</span><span class="p">,</span> <span class="mf">42</span><span class="p">),</span> <span class="p">(</span><span class="n">preference2</span><span class="p">,</span> <span class="mf">26</span><span class="p">),</span> <span class="p">(</span><span class="n">preference3</span><span class="p">,</span> <span class="mf">17</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">(</span><span class="n">preference4</span><span class="p">,</span> <span class="mf">15</span><span class="p">)])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Nashville&quot;</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">)</span>
+<span class="go">[(58, &#39;Nashville &gt; Memphis&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Memphis&quot;</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">)</span>
+<span class="go">[(42, &#39;Memphis &gt; Nashville&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Knoxville&quot;</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">)</span>
+<span class="go">[(17, &#39;Knoxville &gt; Chattanooga&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Chattanooga&quot;</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">)</span>
+<span class="go">[(83, &#39;Chattanooga &gt; Knoxville&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">(</span><span class="s">&quot;Nashville&quot;</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">)</span>
+<span class="go">[(68, &#39;Nashville &gt; Knoxville&#39;)]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="borda-voting">
+<h2>Borda Voting<a class="headerlink" href="#borda-voting" title="Permalink to this headline">¶</a></h2>
+<p>The Borda count method has four major varieties:</p>
+<blockquote>
+<div><ul class="simple">
+<li>standard</li>
+<li>fractional</li>
+<li>truncated</li>
+<li>modified</li>
+</ul>
+</div></blockquote>
+<p>These are covered below, starting with the standard Borda method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.singlewinner.preferential</span> <span class="kn">import</span> <span class="n">BordaVoting</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">BordaVoting</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;standard&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">26</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">17</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">15</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[(194, u&#39;Nashville&#39;)]</span>
+</pre></div>
+</div>
+<p>Here are the results using the fractional Borda count:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">BordaVoting</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;fractional&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">26</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">17</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">15</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[(57.666666666666664, u&#39;Nashville&#39;)]</span>
+</pre></div>
+</div>
+<p>Here are the results using a truncated Borda count:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">BordaVoting</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;truncated&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">0</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">0</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">26</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">17</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">0</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">0</span><span class="p">,</span> <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">15</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[(179, u&#39;Nashville&#39;)]</span>
+</pre></div>
+</div>
+<p>Here are the results using modified Borda count:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">BordaVoting</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;modified&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Memphis&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Nashville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">26</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Knoxville&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">17</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Chattanooga&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">15</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[(52, u&#39;Nashville&#39;)]</span>
+</pre></div>
+</div>
+<p>In the Borda count it is possible for a candidate who is the first preference
+of an absolute majority of voters to fail to be elected; this is because the
+Borda count affords greater importance to a voter&#8217;s lower preferences than most
+other systems. Here is an example of that in action:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">BordaVoting</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&quot;standard&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Alice&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Carol&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Bob&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Dave&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">51</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Carol&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Bob&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Dave&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Alice&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Bob&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Carol&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Dave&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Alice&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">23</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Dave&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Carol&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Bob&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Alice&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">21</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[(205, u&#39;Carol&#39;)]</span>
+</pre></div>
+</div>
+<p>In most other systems, Alice would have been the winner. Take, for example, the
+Kemeny-Young method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">KemenyYoungVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Alice&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Carol&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Bob&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Dave&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">51</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Carol&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Bob&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Dave&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Alice&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Bob&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Carol&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Dave&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Alice&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">23</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preference</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>  <span class="s">&quot;Dave&quot;</span><span class="p">:</span> <span class="mf">1</span><span class="p">,</span> <span class="s">&quot;Carol&quot;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&quot;Bob&quot;</span><span class="p">:</span> <span class="mf">3</span><span class="p">,</span> <span class="s">&quot;Alice&quot;</span><span class="p">:</span> <span class="mf">4</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">add_votes</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="mf">21</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[(388, (u&#39;Alice&#39;, u&#39;Carol&#39;, u&#39;Bob&#39;, u&#39;Dave&#39;))]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Preferential</a><ul>
+<li><a class="reference internal" href="#copeland-s-method">Copeland&#8217;s Method</a></li>
+<li><a class="reference internal" href="#the-kemeny-young-method">The Kemeny-Young Method</a></li>
+<li><a class="reference internal" href="#minmax-voting">Minmax Voting</a></li>
+<li><a class="reference internal" href="#borda-voting">Borda Voting</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="plurality.html"
+                        title="previous chapter">Plurality Voting</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rated.html"
+                        title="next chapter">Rated Voting</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../../_sources/docs/methods/singlewinner/preferential.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rated.html" title="Rated Voting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="plurality.html" title="Plurality Voting"
+             >previous</a> |</li>
+        <li><a href="../../../index.html">BallotBox v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Duncan McGreggor.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

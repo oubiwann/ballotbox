@@ -1,0 +1,7 @@
+======
+Ballot
+======
+
+.. automodule:: ballotbox.ballot
+    :members:
+    :undoc-members:

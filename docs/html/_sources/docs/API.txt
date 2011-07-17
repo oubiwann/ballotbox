@@ -1,0 +1,17 @@
+=================
+API Documentation
+=================
+
+.. automodule:: ballotbox.ballot
+    :members:
+    :undoc-members:
+    :inherited-members:
+
+    :members:
+    :undoc-members:
+    :inherited-members:
+
+.. automodule:: ballotbox.singlewinner.simple
+    :members:
+    :undoc-members:
+    :inherited-members:

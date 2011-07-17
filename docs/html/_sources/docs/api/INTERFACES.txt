@@ -1,0 +1,19 @@
+==========
+Interfaces
+==========
+
+
+.. autointerface:: ballotbox.iballot.IBallotBox
+    :members:
+
+.. autointerface:: ballotbox.criteria.ICriterion
+    :members:
+
+.. autointerface:: ballotbox.criteria.IMajorityCriterion
+    :members:
+
+.. autointerface:: ballotbox.criteria.IMajorityLoserCriterion
+    :members:
+
+.. autointerface:: ballotbox.criteria.IMutualMajorityCriterion
+    :members:

@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Interfaces &mdash; BallotBox v0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="BallotBox v0.1 documentation" href="../../index.html" />
+    <link rel="up" title="API Documentation" href="API.html" />
+    <link rel="next" title="Ballot" href="BALLOT.html" />
+    <link rel="prev" title="API Documentation" href="API.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="BALLOT.html" title="Ballot"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">BallotBox v0.1 documentation</a> &raquo;</li>
+          <li><a href="API.html" accesskey="U">API Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="interfaces">
+<h1>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline">¶</a></h1>
+<dl class="interface">
+<dt id="ballotbox.iballot.IBallotBox">
+<em class="property">interface </em><tt class="descclassname">ballotbox.iballot.</tt><tt class="descname">IBallotBox</tt><a class="headerlink" href="#ballotbox.iballot.IBallotBox" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="IBallotBox.get_winner">
+<tt class="descname">get_winner</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#IBallotBox.get_winner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the winner, if one exists.</p>
+<p>This is a wrapper for the mehtod of the same name on the IVotingMethod
+implementation class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="IBallotBox.add_vote">
+<tt class="descname">add_vote</tt><big>(</big><em>self</em>, <em>vote</em><big>)</big><a class="headerlink" href="#IBallotBox.add_vote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a single vote at a time.</p>
+<p>The parameter &#8216;vote&#8217; can be either a single string representing a
+candidate, or a dictionary representing a set of preferences cast by a
+single voter.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="IBallotBox.method">
+<tt class="descname">method</tt><a class="headerlink" href="#IBallotBox.method" title="Permalink to this definition">¶</a></dt>
+<dd><p>The voting methodology used (a <a href="#id1"><span class="problematic" id="id2">*</span></a>Voting instance)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="IBallotBox.add_votes">
+<tt class="descname">add_votes</tt><big>(</big><em>self</em>, <em>vote</em>, <em>count</em><big>)</big><a class="headerlink" href="#IBallotBox.add_votes" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a unique vote, add the number of times it was voted for.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="IBallotBox.get_total_votes">
+<tt class="descname">get_total_votes</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#IBallotBox.get_total_votes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count all otes cast for all candidates.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="IBallotBox.batch_votes">
+<tt class="descname">batch_votes</tt><big>(</big><em>self</em>, <em>votes</em><big>)</big><a class="headerlink" href="#IBallotBox.batch_votes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method differs from the add_votes method in that there is more
+than one vote being cast, each with potentially many vote counts.</p>
+<dl class="docutils">
+<dt>The parameter &#8216;votes&#8217; should be a list of tuples:</dt>
+<dd>[(vote1, count1), (vote2, count2), ... (voten, countn)]</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="interface">
+<dt id="ballotbox.criteria.ICriterion">
+<em class="property">interface </em><tt class="descclassname">ballotbox.criteria.</tt><tt class="descname">ICriterion</tt><a class="headerlink" href="#ballotbox.criteria.ICriterion" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base interface for all criteria.</p>
+</dd></dl>
+
+<dl class="interface">
+<dt id="ballotbox.criteria.IMajorityCriterion">
+<em class="property">interface </em><tt class="descclassname">ballotbox.criteria.</tt><tt class="descname">IMajorityCriterion</tt><a class="headerlink" href="#ballotbox.criteria.IMajorityCriterion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends: <a class="reference internal" href="#ballotbox.criteria.ICriterion" title="ballotbox.criteria.ICriterion"><tt class="xref py py-class docutils literal"><span class="pre">ballotbox.criteria.ICriterion</span></tt></a></p>
+<p>The majority criterion is a single-winner voting system criterion, used to
+compare such systems. The criterion states that &#8220;if one candidate is
+preferred by a majority (more than 50%) of voters, then that candidate must
+win&#8221;.</p>
+<p>Some methods that comply with this criterion include any Condorcet method,
+instant-runoff voting, and Bucklin voting.</p>
+<p>Some methods which give weight to preference strength fail the majority
+criterion, while others pass it. Thus the Borda count and range voting fail
+the majority criterion, while the Majority judgment passes it. The
+application of the majority criterion to methods which cannot provide a
+full ranking, such as approval voting, is disputed.</p>
+<p>These methods that fail the majority criterion may offer a strategic
+incentive to voters to bullet vote, i.e., vote for one candidate only, not
+providing any information about their possible support for other
+candidates, since, with such methods, these additional votes may aid their
+less-preferred.</p>
+</dd></dl>
+
+<dl class="interface">
+<dt id="ballotbox.criteria.IMajorityLoserCriterion">
+<em class="property">interface </em><tt class="descclassname">ballotbox.criteria.</tt><tt class="descname">IMajorityLoserCriterion</tt><a class="headerlink" href="#ballotbox.criteria.IMajorityLoserCriterion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends: <a class="reference internal" href="#ballotbox.criteria.ICriterion" title="ballotbox.criteria.ICriterion"><tt class="xref py py-class docutils literal"><span class="pre">ballotbox.criteria.ICriterion</span></tt></a></p>
+<p>The majority loser criterion is a criterion to evaluate single-winner
+voting systems. The criterion states that if a majority of voters prefers
+every other candidate over a given candidate, then that candidate must not
+win.</p>
+<p>Either of the Condorcet loser criterion or the mutual majority criterion
+imply the majority loser criterion. However, the Condorcet criterion does
+not imply the majority loser criterion. Neither does the majority criterion
+imply the majority loser criterion.</p>
+<p>Methods that comply with this criterion include Schulze, Ranked Pairs,
+Kemeny-Young, Nanson, Baldwin, Coombs, Borda, Bucklin, instant-runoff
+voting, contingent voting, and anti-plurality voting.</p>
+<p>Methods that do not comply with this criterion include plurality, MiniMax,
+Sri Lankan contingent voting, supplementary voting, approval voting, and
+range voting.</p>
+</dd></dl>
+
+<dl class="interface">
+<dt id="ballotbox.criteria.IMutualMajorityCriterion">
+<em class="property">interface </em><tt class="descclassname">ballotbox.criteria.</tt><tt class="descname">IMutualMajorityCriterion</tt><a class="headerlink" href="#ballotbox.criteria.IMutualMajorityCriterion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends: <a class="reference internal" href="#ballotbox.criteria.IMajorityCriterion" title="ballotbox.criteria.IMajorityCriterion"><tt class="xref py py-class docutils literal"><span class="pre">ballotbox.criteria.IMajorityCriterion</span></tt></a>, <a class="reference internal" href="#ballotbox.criteria.IMajorityLoserCriterion" title="ballotbox.criteria.IMajorityLoserCriterion"><tt class="xref py py-class docutils literal"><span class="pre">ballotbox.criteria.IMajorityLoserCriterion</span></tt></a></p>
+<p>The mutual majority criterion is a criterion used to compare voting
+systems. It is also known as the majority criterion for solid coalitions
+and the generalized majority criterion. The criterion states: If there is a
+subset S of the candidates such that more than half of the voters strictly
+prefer every member of S to every candidate outside of S, and this majority
+votes sincerely, then the winner must come from S. This is similar to but
+more strict than the majority criterion, where the requirement applies only
+to the case that S contains a single candidate.</p>
+<p>Methods that pass: The Schulze method, ranked pairs, instant-runoff voting,
+Nanson&#8217;s method, Bucklin voting.</p>
+<p>Methods that fail: plurality, approval voting, range voting, the Borda
+count, minimax.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="API.html"
+                        title="previous chapter">API Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="BALLOT.html"
+                        title="next chapter">Ballot</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/docs/api/INTERFACES.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="BALLOT.html" title="Ballot"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="API.html" title="API Documentation"
+             >previous</a> |</li>
+        <li><a href="../../index.html">BallotBox v0.1 documentation</a> &raquo;</li>
+          <li><a href="API.html" >API Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Duncan McGreggor.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

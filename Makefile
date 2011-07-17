@@ -45,6 +45,8 @@ check-dist:
 check: build check-docs check-votingdocs
 	trial ballotbox
 
+build-docs:
+	cd docs/sphinx; make html
 
 commit: check
 	bzr commit --show-diff

@@ -4,19 +4,29 @@ from zope.interface import Attribute, Interface
 class IBallotBox(Interface):
     """
     """
-    method = Attribute("The voting method used")
+    method = Attribute("The voting methodology used (a *Voting instance)")
 
     def add_vote(self, vote):
         """
         Add a single vote at a time.
 
-        Depending upon the voting method, the data type of the passed parameter
-        'vote' could change.
+        The parameter 'vote' can be either a single string representing a
+        candidate, or a dictionary representing a set of preferences cast by a
+        single voter.
         """
 
-    def add_votes(self, votes):
+    def add_votes(self, vote, count):
         """
-        Add multiple votes at a time.
+        For a unique vote, add the number of times it was voted for.
+        """
+
+    def batch_votes(self, votes):
+        """
+        This method differs from the add_votes method in that there is more
+        than one vote being cast, each with potentially many vote counts.
+
+        The parameter 'votes' should be a list of tuples:
+            [(vote1, count1), (vote2, count2), ... (voten, countn)]
         """
 
     def get_total_votes(self):

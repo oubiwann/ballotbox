@@ -18,6 +18,71 @@ class BallotBox(dict):
             method = method(*args, **kwargs)
         self.method = method
 
+    # XXX looks like we should do a decorator for all of these calls
+    def __getitem__(self, key):
+        """
+        x.__getitem__(y) <==> x[y]
+        """
+        key = self._encode(key)
+        return super(BallotBox, self).__getitem__(key)
+
+    def __setitem__(self, key, value):
+        """
+        x.__setitem__(i, y) <==> x[i]=y
+        """
+        key = self._encode(key)
+        super(BallotBox, self).__setitem__(key, value)
+
+    def has_key(self, key):
+        """
+        D.has_key(k) -> True if D has a key k, else False.
+        """
+        key = self._encode(key)
+        super(BallotBox, self).has_key(key)
+
+    def items(self):
+        """
+        D.items() -> list of D's (key, value) pairs, as 2-tuples.
+        """
+        data = super(BallotBox, self).items()
+        return [(self._decode(key), value) for key, value in data]
+
+    def keys(self):
+        """
+        D.keys() -> list of D's keys.
+        """
+        data = super(BallotBox, self).keys()
+        return [self._decode(key) for key in data]
+
+    def iteritems(self):
+        """
+        D.iteritems() -> an iterator over the (key, value) items of D.
+        """
+        for key, value in super(BallotBox, self).iteritems():
+            key = self._decode(key)
+            yield key, value
+
+    def iterkeys(self):
+        """
+        D.iterkeys() -> an iterator over the keys of D.
+        """
+        for key in super(BallotBox, self).iterkeys():
+            key = self._decode(key)
+            yield json.loads(key)
+
+    def update(self, vote):
+        """
+        D.update(E, **F) -> None.  Update D from dict/iterable E and F.
+
+         * If E has a .keys() method, does:     for k in E: D[k] = E[k]
+
+         * If E lacks .keys() method, does:     for (k, v) in E: D[k] = v
+
+        In either case, this is followed by: for k in F: D[k] = F[k]
+        """
+        data = [(self._encode(key), value) for key, value in vote.items()]
+        super(BallotBox, self).update(dict(data))
+
     def _is_string(self, data):
         if isinstance(data, basestring):
             return True
@@ -33,41 +98,6 @@ class BallotBox(dict):
             return json.loads(data)
         except ValueError:
             return data
-
-    # XXX looks like we should do a decorator for all of these calls
-    def __getitem__(self, key):
-        key = self._encode(key)
-        return super(BallotBox, self).__getitem__(key)
-
-    def __setitem__(self, key, value):
-        key = self._encode(key)
-        super(BallotBox, self).__setitem__(key, value)
-
-    def has_key(self, key):
-        key = self._encode(key)
-        super(BallotBox, self).has_key(key)
-
-    def items(self):
-        data = super(BallotBox, self).items()
-        return [(self._decode(key), value) for key, value in data]
-
-    def keys(self):
-        data = super(BallotBox, self).keys()
-        return [self._decode(key) for key in data]
-
-    def iteritems(self):
-        for key, value in super(BallotBox, self).iteritems():
-            key = self._decode(key)
-            yield key, value
-
-    def iterkeys(self):
-        for key in super(BallotBox, self).iterkeys():
-            key = self._decode(key)
-            yield json.loads(key)
-
-    def _update(self, vote):
-        data = [(self._encode(key), value) for key, value in vote.items()]
-        super(BallotBox, self).update(dict(data))
 
     def add_vote(self, vote):
         """
@@ -99,7 +129,16 @@ class BallotBox(dict):
             self.add_votes(vote, count)
 
     def get_total_votes(self):
+        """
+        Count all votes cast for all candidates.
+        """
         return sum(self.values())
 
     def get_winner(self, *args, **kwargs):
+        """
+        Determine the winner, if one exists.
+
+        This is a wrapper for the method of the same name on the IVotingMethod
+        implementation class.
+        """
         return self.method.get_winner(self, *args, **kwargs)

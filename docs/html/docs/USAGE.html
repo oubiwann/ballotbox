@@ -1,0 +1,148 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Usage &mdash; BallotBox v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="BallotBox v0.1 documentation" href="../index.html" />
+    <link rel="next" title="Changes" href="HISTORY.html" />
+    <link rel="prev" title="Installation" href="INSTALL.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="HISTORY.html" title="Changes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="INSTALL.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">BallotBox v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>Below is a quick introduction to the usage of the API. The voting method used
+in this example is simple majority.  Simple majority rule voting is mostly
+useful for binary decision. Below are some examples involving just two
+choices:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.ballot</span> <span class="kn">import</span> <span class="n">BallotBox</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.singlewinner.simple</span> <span class="kn">import</span> <span class="n">MajorityRuleVoting</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">10000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">5000</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[(10000, &#39;alice&#39;)]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">5000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">5001</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[(5001, &#39;carol&#39;)]</span>
+</pre></div>
+</div>
+<p>This method breaks down with ties and is not guaranteed to work with more than
+two choices:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">8000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">8000</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+<p>No result is returned. Likewise for edge cases with more than two candidates:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">5000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">4000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">3000</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="INSTALL.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="HISTORY.html"
+                        title="next chapter">Changes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/docs/USAGE.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="HISTORY.html" title="Changes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="INSTALL.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="../index.html">BallotBox v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Duncan McGreggor.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

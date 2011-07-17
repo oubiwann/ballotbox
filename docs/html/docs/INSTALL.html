@@ -1,0 +1,164 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &mdash; BallotBox v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="BallotBox v0.1 documentation" href="../index.html" />
+    <link rel="next" title="Usage" href="USAGE.html" />
+    <link rel="prev" title="Welcome to BallotBox’s documentation!" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="USAGE.html" title="Usage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to BallotBox’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">BallotBox v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="development">
+<h2>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h2>
+<p>If you want to develop for ballotbox or use the latest code we&#8217;re working on,
+you can install from the sources. You&#8217;ll need bzr installed, and then just do
+the following:</p>
+<div class="highlight-python"><pre>$ bzr branch lp:ballotbox
+$ cd ballotbox
+$ sudo python setup.py install</pre>
+</div>
+</div>
+<div class="section" id="easy-install">
+<h2>Easy Install<a class="headerlink" href="#easy-install" title="Permalink to this headline">¶</a></h2>
+<p>You can use the setuptools easy_install script to get ballotbox on your
+system:</p>
+<div class="highlight-python"><pre>$ sudo easy_install ballotbox</pre>
+</div>
+</div>
+<div class="section" id="manual-download">
+<h2>Manual Download<a class="headerlink" href="#manual-download" title="Permalink to this headline">¶</a></h2>
+<p>You can manually download the source tarball from the Python Package Index by
+visiting the following URL:</p>
+<blockquote>
+<div><a class="reference external" href="http://pypi.python.org/pypi/ballotbox">http://pypi.python.org/pypi/ballotbox</a></div></blockquote>
+<p>You&#8217;ll need to untar and gunzip the source, cd into the source directory, and
+then you can do the usual:</p>
+<div class="highlight-python"><pre>$ sudo python setup.py install</pre>
+</div>
+</div>
+<div class="section" id="checking-the-source">
+<h2>Checking the Source<a class="headerlink" href="#checking-the-source" title="Permalink to this headline">¶</a></h2>
+<p>Once installed, as long as you have Twisted installed on your system and the
+trial script in your PATH, you can test the source code by executing this
+anywhere:</p>
+<div class="highlight-python"><pre>$ trial ballotbox</pre>
+</div>
+<p>That will run the test suite and report on the success and failure of any unit
+tests.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#development">Development</a></li>
+<li><a class="reference internal" href="#easy-install">Easy Install</a></li>
+<li><a class="reference internal" href="#manual-download">Manual Download</a></li>
+<li><a class="reference internal" href="#checking-the-source">Checking the Source</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Welcome to BallotBox&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="USAGE.html"
+                        title="next chapter">Usage</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/docs/INSTALL.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="USAGE.html" title="Usage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to BallotBox’s documentation!"
+             >previous</a> |</li>
+        <li><a href="../index.html">BallotBox v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Duncan McGreggor.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
