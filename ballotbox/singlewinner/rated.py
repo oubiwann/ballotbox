@@ -1,3 +1,6 @@
+from ballotbox.singlewinner.preferential.other import BucklinVoting
+
+
 class RangeVoting(object):
     """
     Range voting (also called ratings summation, average voting, cardinal
