@@ -4,7 +4,7 @@ Usage
 
 Below is a quick introduction to the usage of the API. The voting method used
 in this example is simple majority.  Simple majority rule voting is mostly
-useful for binary decision. Below are some examples involving just two
+useful for binary decisions. Here are some examples involving just two
 choices::
 
     >>> from ballotbox.ballot import BallotBox

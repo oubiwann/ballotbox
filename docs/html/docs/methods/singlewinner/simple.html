@@ -57,18 +57,18 @@
 <h1>Simple Voting<a class="headerlink" href="#simple-voting" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="majority-rule">
 <h2>Majority Rule<a class="headerlink" href="#majority-rule" title="Permalink to this headline">¶</a></h2>
-<p>Simple majority rule voting is mostly useful for binary decision. Below are
+<p>Simple majority rule voting is mostly useful for binary decisions. Below are
 some examples involving just two choices:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.ballot</span> <span class="kn">import</span> <span class="n">BallotBox</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ballotbox.singlewinner.simple</span> <span class="kn">import</span> <span class="n">MajorityRuleVoting</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">10000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">5000</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
 <span class="go">[(10000, &#39;alice&#39;)]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mi">5001</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">5000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">5001</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
 <span class="go">[(5001, &#39;carol&#39;)]</span>
 </pre></div>
@@ -76,14 +76,14 @@ some examples involving just two choices:</p>
 <p>This method breaks down with ties and is not guaranteed to work with more than
 two choices:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mi">8000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mi">8000</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">8000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">8000</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
 <span class="go">[]</span>
 </pre></div>
 </div>
 <p>No result is returned. Likewise for edge cases with more than two candidates:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span> <span class="o">=</span> <span class="n">BallotBox</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">MajorityRuleVoting</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mi">4000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">batch_votes</span><span class="p">([(</span><span class="s">&quot;alice&quot;</span><span class="p">,</span> <span class="mf">5000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;bob&quot;</span><span class="p">,</span> <span class="mf">4000</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;carol&quot;</span><span class="p">,</span> <span class="mf">3000</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bb</span><span class="o">.</span><span class="n">get_winner</span><span class="p">()</span>
 <span class="go">[]</span>
 </pre></div>

@@ -6,7 +6,7 @@ Simple Voting
 Majority Rule
 -------------
 
-Simple majority rule voting is mostly useful for binary decision. Below are
+Simple majority rule voting is mostly useful for binary decisions. Below are
 some examples involving just two choices::
 
     >>> from ballotbox.ballot import BallotBox
