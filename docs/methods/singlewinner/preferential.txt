@@ -477,3 +477,26 @@ retallies until only one winner remains::
 
     >>> bb.get_winner()
     [(205, u'Carol')]
+
+
+------------------
+Ranked Pair Voting
+------------------
+
+    >>> from ballotbox.singlewinner.preferential import RankedPairsVoting
+
+    >>> bb = BallotBox(method=RankedPairsVoting)
+    >>> preference = {
+    ...   "Memphis": 1, "Nashville": 2, "Chattanooga": 3, "Knoxville": 4}
+    >>> bb.add_votes(preference, 42)
+    >>> preference = {
+    ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 3, "Memphis": 4}
+    >>> bb.add_votes(preference, 26)
+    >>> preference = {
+    ...   "Knoxville": 1, "Chattanooga": 2, "Nashville": 3, "Memphis": 4}
+    >>> bb.add_votes(preference, 17)
+    >>> preference = {
+    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 3, "Memphis": 4}
+    >>> bb.add_votes(preference, 15)
+
+    >>> bb.get_winner()

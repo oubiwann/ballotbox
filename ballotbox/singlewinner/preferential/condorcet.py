@@ -3,7 +3,9 @@ import itertools
 from zope.interface import implements
 
 from ballotbox.criteria import (
-    ICondorcetCriterion, IMajorityCriterion, ISmithCriterion)
+    ICondorcetCriterion, ICondorcetLoserCriterion,
+    IIndependenceOfClonesCriterion, IMajorityCriterion, IMonotonicityCriterion,
+    ISmithCriterion)
 from ballotbox.iballot import IVotingMethod
 from ballotbox.singlewinner.preferential import base, borda
 
@@ -107,7 +109,7 @@ class NansonVoting(borda.StandardBordaVoting):
     at or below the average Borda count score, then the ballots are retallied
     as if the remaining candidates were exclusively on the ballot. This process
     is repeated if necessary until a single winner remains.
-    
+
     The Nanson method and the Baldwin method satisfy the Condorcet criterion:
     since Borda always gives any existing Condorcet winner more than the
     average Borda points, the Condorcet winner will never be eliminated. They
@@ -150,8 +152,8 @@ class NansonVoting(borda.StandardBordaVoting):
                 if candidate not in dropped:
                     new_preferences[candidate] = rank
             new_ballotbox.add_votes(new_preferences, votes)
-        return new_ballotbox            
-        
+        return new_ballotbox
+
     def get_winner(self, ballotbox):
         self.candidate_count = self.get_candidate_count(ballotbox)
         while len(ballotbox.keys()[0].keys()) > 1:
@@ -166,7 +168,7 @@ class BaldwinVoting(NansonVoting):
         the points are tallied in a series of rounds. In each round, the
         candidate with the fewest points is eliminated, and the points are
         re-tallied as if that candidate were not on the ballot.
-    
+
     The Baldwin method satisfy the Condorcet criterion: since Borda always
     gives any existing Condorcet winner more than the average Borda points, the
     Condorcet winner will never be eliminated. It does not satisfy the
@@ -189,6 +191,94 @@ class BaldwinVoting(NansonVoting):
         return counts[-1][CANDIDATE]
 
 
+class RankedPairsVoting(object):
+    """
+    Ranked pairs (RP) or the Tideman method is a voting system developed in
+    1987 by Nicolaus Tideman that selects a single winner using votes that
+    express preferences. RP can also be used to create a sorted list of
+    winners.
+
+    If there is a candidate who is preferred over the other candidates, when
+    compared in turn with each of the others, RP guarantees that candidate will
+    win. Because of this property, RP is (by definition) a Condorcet method.
+
+    The RP procedure is as follows:
+
+        1. Tally the vote count comparing each pair of candidates, and
+           determine the winner of each pair (provided there is not a tie).
+           
+        2. Sort (rank) each pair, by the largest margin of victory first to
+           smallest last.  "Lock in" each pair, starting with the one with the
+           largest number of winning votes, and add one in turn to a graph as
+           long as they do not create a cycle (which would create an
+           ambiguity). The completed graph shows the winner.
+
+        3. RP can also be used to create a sorted list of preferred candidates.
+           To create a sorted list, repeatedly use RP to select a winner,
+           remove that winner from the list of candidates, and repeat (to find
+           the next runner up, and so forth).
+
+    Tally:
+
+        To tally the votes, consider each voter's preferences. For example, if
+        a voter states "A > B > C" (A is better than B, and B is better than
+        C), the tally should add one for A in A vs. B, one for A in A vs. C,
+        and one for B in B vs. C. Voters may also express indifference (e.g., A
+        = B), and unstated candidates are assumed to be equally worse than the
+        stated candidates.
+
+        Once tallied the majorities can be determined. If "Vxy" is the number
+        of Votes that rank x over y, then "x" wins if Vxy > Vyx, and "y" wins
+        if Vyx > Vxy.
+   
+    Sort:
+
+        The pairs of winners, called the "majorities", are then sorted from the
+        largest majority to the smallest majority. A majority for x over y
+        precedes a majority for z over w if and only if one of the following
+        conditions holds:
+
+            1. Vxy > Vzw. In other words, the majority having more support for
+               its alternative is ranked first.
+
+            2. Vxy = Vzw and Vwz > Vyx. Where the majorities are equal, the
+               majority with the smaller minority opposition is ranked first.
+        
+    Lock:
+
+        The next step is to examine each pair in turn to determine which pairs
+        to "lock in". This can be visualized by drawing an arrow from the
+        pair's winner to the pair's loser in a directed graph. Using the sorted
+        list above, lock in each pair in turn unless the pair will create a
+        circularity in the graph (e.g., where A is more than B, B is more than
+        C, but C is more than A).
+
+    Winner:
+
+        In the resulting graph, the source corresponds to the winner. A source
+        is bound to exist because the graph is a directed acyclic graph by
+        construction, and such graphs always have sources. In the absence of
+        pairwise ties, the source is also unique (because whenever two nodes
+        appear as sources, there would be no valid reason not to connect them,
+        leaving only one of them as a source).
+
+    Of the formal voting system criteria, the ranked pairs method passes the
+    majority criterion, the monotonicity criterion, the Condorcet criterion,
+    the Condorcet loser criterion, and the independence of clones criterion.
+    Ranked pairs fails the consistency criterion and the participation
+    criterion. While ranked pairs is not fully independent of irrelevant
+    alternatives, it does satisfy local independence of irrelevant
+    alternatives.
+    """
+    implements(
+        IVotingMethod, IMajorityCriterion, IMonotonicityCriterion,
+        ICondorcetCriterion, ICondorcetLoserCriterion,
+        IIndependenceOfClonesCriterion)
+
+    def get_winner(self, ballotbox):
+        pass
+
+
 class DodgsonVoting(object):
     """
     Dodgson's Method is a voting system proposed by Charles Dodgson.
@@ -204,3 +294,7 @@ class DodgsonVoting(object):
     from the input, such that it has a Condorcet winner; they are declared the
     victor. Computing the winner is an NP-hard problem.
     """
+    implements(IVotingMethod)
+
+    def __init__(self):
+        raise NotImplementedError()

@@ -53,8 +53,280 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="single-winner">
-<h1>Single-Winner<a class="headerlink" href="#single-winner" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-ballotbox.singlewinner.preferential.condorcet">
+<span id="single-winner"></span><h1>Single-Winner<a class="headerlink" href="#module-ballotbox.singlewinner.preferential.condorcet" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="ballotbox.singlewinner.preferential.condorcet.BaldwinVoting">
+<em class="property">class </em><tt class="descclassname">ballotbox.singlewinner.preferential.condorcet.</tt><tt class="descname">BaldwinVoting</tt><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.BaldwinVoting" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>This variant was devised by Joseph M. Baldwin and works like this:</dt>
+<dd>Candidates are voted for on ranked ballots as in the Borda count. Then,
+the points are tallied in a series of rounds. In each round, the
+candidate with the fewest points is eliminated, and the points are
+re-tallied as if that candidate were not on the ballot.</dd>
+</dl>
+<p>The Baldwin method satisfy the Condorcet criterion: since Borda always
+gives any existing Condorcet winner more than the average Borda points, the
+Condorcet winner will never be eliminated. It does not satisfy the
+independence of irrelevant alternatives criterion, the monotonicity
+criterion, the participation criterion, the consistency criterion and the
+independence of clones criterion, while it does satisfy the majority
+criterion, the mutual majority criterion, the Condorcet loser criterion,
+and the Smith criterion. Also, the Baldwin method violates reversal
+symmetry.</p>
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.get_candidate_count">
+<tt class="descname">get_candidate_count</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.get_candidate_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.get_candidates">
+<tt class="descname">get_candidates</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.get_candidates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.get_counts">
+<tt class="descname">get_counts</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.get_counts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.get_points">
+<tt class="descname">get_points</tt><big>(</big><em>rank</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.get_points" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.get_winner">
+<tt class="descname">get_winner</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.get_winner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.iterate">
+<tt class="descname">iterate</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.BaldwinVoting.iterate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ballotbox.singlewinner.preferential.condorcet.CopelandVoting">
+<em class="property">class </em><tt class="descclassname">ballotbox.singlewinner.preferential.condorcet.</tt><tt class="descname">CopelandVoting</tt><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.CopelandVoting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copeland&#8217;s method or Copeland&#8217;s pairwise aggregation method is a Condorcet
+method in which candidates are ordered by the number of pairwise victories,
+minus the number of pairwise defeats.</p>
+<p>Proponents argue that this method is easily understood by the general
+populace, which is generally familiar with the sporting equivalent. In many
+round-robin tournaments, the winner is the competitor with the most
+victories.</p>
+<p>Copeland requires a Smith set containing at least five candidates to give a
+clear winner unless two or more candidates tie in pairwise comparisons.</p>
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.CopelandVoting.get_winner">
+<tt class="descname">get_winner</tt><big>(</big><em>ignored</em>, <em>ballotboxes</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.CopelandVoting.get_winner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ballotbox.singlewinner.preferential.condorcet.DodgsonVoting">
+<em class="property">class </em><tt class="descclassname">ballotbox.singlewinner.preferential.condorcet.</tt><tt class="descname">DodgsonVoting</tt><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.DodgsonVoting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dodgson&#8217;s Method is a voting system proposed by Charles Dodgson.</p>
+<p>In Dodgson&#8217;s method, each voter submits an ordered list of all candidates
+according to their own preference (from best to worst). The winner is
+defined to be the candidate for whom we need to perform the minimum number
+of pairwise swaps (added over all candidates) before they become a
+Condorcet winner. In particular, if there is already a Condorcet winner,
+they win the election.</p>
+<p>In short, we must find the voting profile with minimum Kendall tau distance
+from the input, such that it has a Condorcet winner; they are declared the
+victor. Computing the winner is an NP-hard problem.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ballotbox.singlewinner.preferential.condorcet.KemenyYoungVoting">
+<em class="property">class </em><tt class="descclassname">ballotbox.singlewinner.preferential.condorcet.</tt><tt class="descname">KemenyYoungVoting</tt><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.KemenyYoungVoting" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Kemeny-Young method is a voting system that uses preferential ballots
+and pairwise comparison counts to identify the most popular choices in an
+election. It is a Condorcet method because if there is a Condorcet winner,
+it will always be ranked as the most popular choice.</p>
+<p>This method assigns a score for each possible sequence, where each sequence
+considers which choice might be most popular, which choice might be
+second-most popular, which choice might be third-most popular, and so on
+down to which choice might be least-popular. The sequence that has the
+highest score is the winning sequence, and the first choice in the winning
+sequence is the most popular choice. (As explained below, ties can occur at
+any ranking level.)</p>
+<p>The Kemeny-Young method is also known as the Kemeny rule, VoteFair
+popularity ranking, the maximum likelihood method, and the median relation.</p>
+<p>The Kemeny-Young method uses preferential ballots on which voters rank
+choices according to their order of preference. A voter is allowed to rank
+more than one choice at the same preference level. Unranked choices are
+usually interpreted as least-preferred.</p>
+<p>Another way to view the ordering is that it is the one which minimizes the
+sum of the Kendall tau distances (bubble sort distance) to the voters&#8217;
+lists.</p>
+<p>Kemeny-Young calculations are usually done in two steps. The first step is
+to create a matrix or table that counts pairwise voter preferences. The
+second step is to test all possible rankings, calculate a score for each
+such ranking, and compare the scores. Each ranking score equals the sum of
+the pairwise counts that apply to that ranking.</p>
+<p>The ranking that has the largest score is identified as the overall
+ranking. (If more than one ranking has the same largest score, all these
+possible rankings are tied, and typically the overall ranking involves one
+or more ties.)</p>
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.KemenyYoungVoting.build_lookup">
+<tt class="descname">build_lookup</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.KemenyYoungVoting.build_lookup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.KemenyYoungVoting.get_ranks">
+<tt class="descname">get_ranks</tt><big>(</big><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.KemenyYoungVoting.get_ranks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.KemenyYoungVoting.get_winner">
+<tt class="descname">get_winner</tt><big>(</big><em>ballotbox</em>, <em>position_count=1</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.KemenyYoungVoting.get_winner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ballotbox.singlewinner.preferential.condorcet.NansonVoting">
+<em class="property">class </em><tt class="descclassname">ballotbox.singlewinner.preferential.condorcet.</tt><tt class="descname">NansonVoting</tt><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.NansonVoting" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Nanson method is based on the original work of the mathematician Edward
+J. Nanson.</p>
+<p>Nanson&#8217;s method eliminates those choices from a Borda count tally that are
+at or below the average Borda count score, then the ballots are retallied
+as if the remaining candidates were exclusively on the ballot. This process
+is repeated if necessary until a single winner remains.</p>
+<p>The Nanson method and the Baldwin method satisfy the Condorcet criterion:
+since Borda always gives any existing Condorcet winner more than the
+average Borda points, the Condorcet winner will never be eliminated. They
+do not satisfy the independence of irrelevant alternatives criterion, the
+monotonicity criterion, the participation criterion, the consistency
+criterion and the independence of clones criterion, while they do satisfy
+the majority criterion, the mutual majority criterion, the Condorcet loser
+criterion, and the Smith criterion. The Nanson method satisfies reversal
+symmetry, while the Baldwin method violates reversal symmetry.</p>
+<p>Nanson&#8217;s method was used in city elections in the U.S. town of Marquette,
+Michigan in the 1920s. It was formally used by the Anglican Diocese of
+Melbourne and in the election of members of the University Council of the
+University of Adelaide. It was used by the University of Melbourne until
+1983.</p>
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.NansonVoting.get_candidate_count">
+<tt class="descname">get_candidate_count</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.NansonVoting.get_candidate_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.NansonVoting.get_candidates">
+<tt class="descname">get_candidates</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.NansonVoting.get_candidates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.NansonVoting.get_counts">
+<tt class="descname">get_counts</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.NansonVoting.get_counts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.NansonVoting.get_points">
+<tt class="descname">get_points</tt><big>(</big><em>rank</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.NansonVoting.get_points" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.NansonVoting.get_winner">
+<tt class="descname">get_winner</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.NansonVoting.get_winner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.NansonVoting.iterate">
+<tt class="descname">iterate</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.NansonVoting.iterate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ballotbox.singlewinner.preferential.condorcet.RankedPairsVoting">
+<em class="property">class </em><tt class="descclassname">ballotbox.singlewinner.preferential.condorcet.</tt><tt class="descname">RankedPairsVoting</tt><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.RankedPairsVoting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ranked pairs (RP) or the Tideman method is a voting system developed in
+1987 by Nicolaus Tideman that selects a single winner using votes that
+express preferences. RP can also be used to create a sorted list of
+winners.</p>
+<p>If there is a candidate who is preferred over the other candidates, when
+compared in turn with each of the others, RP guarantees that candidate will
+win. Because of this property, RP is (by definition) a Condorcet method.</p>
+<p>The RP procedure is as follows:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Tally the vote count comparing each pair of candidates, and
+determine the winner of each pair (provided there is not a tie).</li>
+<li>Sort (rank) each pair, by the largest margin of victory first to
+smallest last.  &#8220;Lock in&#8221; each pair, starting with the one with the
+largest number of winning votes, and add one in turn to a graph as
+long as they do not create a cycle (which would create an
+ambiguity). The completed graph shows the winner.</li>
+<li>RP can also be used to create a sorted list of preferred candidates.
+To create a sorted list, repeatedly use RP to select a winner,
+remove that winner from the list of candidates, and repeat (to find
+the next runner up, and so forth).</li>
+</ol>
+</div></blockquote>
+<p>Tally:</p>
+<blockquote>
+<div><p>To tally the votes, consider each voter&#8217;s preferences. For example, if
+a voter states &#8220;A &gt; B &gt; C&#8221; (A is better than B, and B is better than
+C), the tally should add one for A in A vs. B, one for A in A vs. C,
+and one for B in B vs. C. Voters may also express indifference (e.g., A
+= B), and unstated candidates are assumed to be equally worse than the
+stated candidates.</p>
+<p>Once tallied the majorities can be determined. If &#8220;Vxy&#8221; is the number
+of Votes that rank x over y, then &#8220;x&#8221; wins if Vxy &gt; Vyx, and &#8220;y&#8221; wins
+if Vyx &gt; Vxy.</p>
+</div></blockquote>
+<p>Sort:</p>
+<blockquote>
+<div><p>The pairs of winners, called the &#8220;majorities&#8221;, are then sorted from the
+largest majority to the smallest majority. A majority for x over y
+precedes a majority for z over w if and only if one of the following
+conditions holds:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Vxy &gt; Vzw. In other words, the majority having more support for
+its alternative is ranked first.</li>
+<li>Vxy = Vzw and Vwz &gt; Vyx. Where the majorities are equal, the
+majority with the smaller minority opposition is ranked first.</li>
+</ol>
+</div></blockquote>
+</div></blockquote>
+<p>Lock:</p>
+<blockquote>
+<div>The next step is to examine each pair in turn to determine which pairs
+to &#8220;lock in&#8221;. This can be visualized by drawing an arrow from the
+pair&#8217;s winner to the pair&#8217;s loser in a directed graph. Using the sorted
+list above, lock in each pair in turn unless the pair will create a
+circularity in the graph (e.g., where A is more than B, B is more than
+C, but C is more than A).</div></blockquote>
+<p>Winner:</p>
+<blockquote>
+<div>In the resulting graph, the source corresponds to the winner. A source
+is bound to exist because the graph is a directed acyclic graph by
+construction, and such graphs always have sources. In the absence of
+pairwise ties, the source is also unique (because whenever two nodes
+appear as sources, there would be no valid reason not to connect them,
+leaving only one of them as a source).</div></blockquote>
+<p>Of the formal voting system criteria, the ranked pairs method passes the
+majority criterion, the monotonicity criterion, the Condorcet criterion,
+the Condorcet loser criterion, and the independence of clones criterion.
+Ranked pairs fails the consistency criterion and the participation
+criterion. While ranked pairs is not fully independent of irrelevant
+alternatives, it does satisfy local independence of irrelevant
+alternatives.</p>
+<dl class="method">
+<dt id="ballotbox.singlewinner.preferential.condorcet.RankedPairsVoting.get_winner">
+<tt class="descname">get_winner</tt><big>(</big><em>ballotbox</em><big>)</big><a class="headerlink" href="#ballotbox.singlewinner.preferential.condorcet.RankedPairsVoting.get_winner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 

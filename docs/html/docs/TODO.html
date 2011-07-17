@@ -53,12 +53,29 @@
             
   <div class="section" id="todo">
 <h1>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
 <p>[DONE] Convert the criteria classes to use interfaces. Then, instead of
 subclassing these in the voting methods, they would implement them. This will
 make zope.interface a dependency.</p>
 <p>[DONE] Copy multi-doctest file test suite code from txULS/soom to here.</p>
 <p>[DONE] Add a new docs/methods directory and a file for each voting method.</p>
-<p>Add doctests for each voting method.</p>
+<p>[IN PROGRESS] Finish implementing the single-winner voting methods.</p>
+<p>Implement the Multi-winner voting methods.</p>
+<p>Implement the proxy and random voting methods.</p>
+<p>Do research on distance-based voting:</p>
+<blockquote>
+<div><ul class="simple">
+<li>in particular, defining a metric space for candidates based on a set of
+preferences</li>
+<li>then taking the square root of the sum of the squares, getting the
+n-dimensional distance</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>[IN PROGRESS] Add doctests for each voting method.</p>
 <p>Add a make target that tests the source dist:</p>
 <blockquote>
 <div><ul class="simple">
@@ -68,6 +85,24 @@ make zope.interface a dependency.</p>
 </ul>
 </div></blockquote>
 </div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Change uppercase doc files to lower case (with the exceptions of the
+standard ones like README, TODO, etc.)</li>
+<li>Updated the sphinx configuration file to use ballotbox.meta</li>
+<li>Add sidebar links in the generated docs</li>
+<li>Autogenerate ReST files for API docs<ul>
+<li>the logic that drives this should go in ballotbox.util.docs</li>
+<li>add a make target that imports and calls the appropriate functions to
+generate the API docs</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
 
 
           </div>
@@ -75,6 +110,16 @@ make zope.interface a dependency.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">TODO</a><ul>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="LICENSE.html"
                         title="previous chapter">License</a></p>

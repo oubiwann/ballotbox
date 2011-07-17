@@ -2,6 +2,9 @@
 TODO
 ====
 
+Implementation
+--------------
+
 [DONE] Convert the criteria classes to use interfaces. Then, instead of
 subclassing these in the voting methods, they would implement them. This will
 make zope.interface a dependency.
@@ -10,7 +13,24 @@ make zope.interface a dependency.
 
 [DONE] Add a new docs/methods directory and a file for each voting method.
 
-Add doctests for each voting method.
+[IN PROGRESS] Finish implementing the single-winner voting methods.
+
+Implement the Multi-winner voting methods.
+
+Implement the proxy and random voting methods.
+
+Do research on distance-based voting:
+
+ * in particular, defining a metric space for candidates based on a set of
+   preferences
+
+ * then taking the square root of the sum of the squares, getting the
+   n-dimensional distance 
+
+Testing
+-------
+
+[IN PROGRESS] Add doctests for each voting method.
 
 Add a make target that tests the source dist:
 
@@ -19,3 +39,20 @@ Add a make target that tests the source dist:
  * untar the dist there
 
  * run the unit tests and doctests against that directory
+
+Documentation
+-------------
+
+ * Change uppercase doc files to lower case (with the exceptions of the
+   standard ones like README, TODO, etc.) 
+
+ * Updated the sphinx configuration file to use ballotbox.meta
+
+ * Add sidebar links in the generated docs
+
+ * Autogenerate ReST files for API docs
+
+   * the logic that drives this should go in ballotbox.util.docs
+
+   * add a make target that imports and calls the appropriate functions to
+     generate the API docs

@@ -1,3 +1,9 @@
 =============
 Single-Winner
 =============
+
+.. automodule:: ballotbox.singlewinner.preferential.condorcet
+    :members:
+    :undoc-members:
+    :inherited-members:
+

@@ -450,3 +450,54 @@ results in exactly one winner::
 
     >>> bb.get_winner()
     [(205, u'Carol')]
+
+
+Baldwin Voting
+--------------
+
+While the Nanson method drops candidates below the average, the Baldwin method
+simple drops the lowest ranking candidate (using Borda count scores) and
+retallies until only one winner remains::
+
+    >>> from ballotbox.singlewinner.preferential import BaldwinVoting
+
+    >>> bb = BallotBox(method=BaldwinVoting)
+    >>> preference = {
+    ...   "Alice": 1, "Carol": 2, "Bob": 3, "Dave": 4}
+    >>> bb.add_votes(preference, 51)
+    >>> preference = {
+    ...   "Carol": 1, "Bob": 2, "Dave": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 5)
+    >>> preference = {
+    ...   "Bob": 1, "Carol": 2, "Dave": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 23)
+    >>> preference = {
+    ...   "Dave": 1, "Carol": 2, "Bob": 3, "Alice": 4}
+    >>> bb.add_votes(preference, 21)
+
+    >>> bb.get_winner()
+    [(205, u'Carol')]
+
+
+------------------
+Ranked Pair Voting
+------------------
+
+    >>> from ballotbox.singlewinner.preferential import RankedPairsVoting
+
+    >>> bb = BallotBox(method=RankedPairsVoting)
+    >>> preference = {
+    ...   "Memphis": 1, "Nashville": 2, "Chattanooga": 3, "Knoxville": 4}
+    >>> bb.add_votes(preference, 42)
+    >>> preference = {
+    ...   "Nashville": 1, "Chattanooga": 2, "Knoxville": 3, "Memphis": 4}
+    >>> bb.add_votes(preference, 26)
+    >>> preference = {
+    ...   "Knoxville": 1, "Chattanooga": 2, "Nashville": 3, "Memphis": 4}
+    >>> bb.add_votes(preference, 17)
+    >>> preference = {
+    ...   "Chattanooga": 1, "Knoxville": 2, "Nashville": 3, "Memphis": 4}
+    >>> bb.add_votes(preference, 15)
+
+    >>> bb.get_winner()
+    [(194, u'Nashville')]
