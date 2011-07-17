@@ -127,13 +127,23 @@ class NansonVoting(borda.StandardBordaVoting):
     implements(
         IVotingMethod, IMajorityCriterion, ISmithCriterion)
 
-    def iterate(self, ballotbox):
+    def _get_new_ballotbox(self, ballotbox):
         klass = ballotbox.__class__
-        new_ballotbox = klass(method=self.__class__)
+        return klass(method=self.__class__)
+
+    def _get_dropped_candidates(self, ballotbox):
+        """
+        Drop the candidates whose scores are lower than the average Borda score
+        of all candidates in the ballotbox.
+        """
         counts = self.get_counts(ballotbox)
         points = [count for count, candidate in counts]
         average = sum(points)/float(len(counts))
-        dropped = [candidate for count, candidate in counts if count < average]
+        return [candidate for count, candidate in counts if count < average]
+
+    def iterate(self, ballotbox):
+        new_ballotbox = self._get_new_ballotbox(ballotbox)
+        dropped = self._get_dropped_candidates(ballotbox)
         for preferences, votes in ballotbox.items():
             new_preferences = {}
             for candidate, rank in preferences.items():
@@ -149,11 +159,34 @@ class NansonVoting(borda.StandardBordaVoting):
         return self.get_counts(ballotbox)
 
 
-class BaldwinVoting(object):
+class BaldwinVoting(NansonVoting):
     """
+    This variant was devised by Joseph M. Baldwin and works like this:
+        Candidates are voted for on ranked ballots as in the Borda count. Then,
+        the points are tallied in a series of rounds. In each round, the
+        candidate with the fewest points is eliminated, and the points are
+        re-tallied as if that candidate were not on the ballot.
+    
+    The Baldwin method satisfy the Condorcet criterion: since Borda always
+    gives any existing Condorcet winner more than the average Borda points, the
+    Condorcet winner will never be eliminated. It does not satisfy the
+    independence of irrelevant alternatives criterion, the monotonicity
+    criterion, the participation criterion, the consistency criterion and the
+    independence of clones criterion, while it does satisfy the majority
+    criterion, the mutual majority criterion, the Condorcet loser criterion,
+    and the Smith criterion. Also, the Baldwin method violates reversal
+    symmetry.
     """
     implements(
         IVotingMethod, ICondorcetCriterion, IMajorityCriterion)
+
+    def _get_dropped_candidates(self, ballotbox):
+        """
+        Drop the candidates who has the lowest Borda score.
+        """
+        counts = self.get_counts(ballotbox)
+        COUNT, CANDIDATE = (0, 1)
+        return counts[-1][CANDIDATE]
 
 
 class DodgsonVoting(object):
