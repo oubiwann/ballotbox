@@ -257,6 +257,37 @@ class ICondorcetLoserCriterion(IMajorityLoserCriterion):
     """
 
 
+class ISmithCriterion(ICondorcetCriterion, ICondorcetLoserCriterion,
+                      IMutualMajorityCriterion):
+    """
+    The Smith criterion (sometimes generalized Condorcet criterion, but this
+    can have other meanings) is a voting systems criterion defined such that
+    its satisfaction by a voting system occurs when the system always picks the
+    winner from the Smith set, the smallest set of candidates such that every
+    member of the set is pairwise preferred to every candidate not in the set.
+
+    One candidate is pairwise preferred over another candidate if, in a
+    one-on-one competition, more voters prefer the first candidate than prefer
+    the other candidate. 
+    
+    The Smith set is named for mathematician John H Smith, whose version of the
+    Condorcet criterion is actually stronger than that defined above for social
+    welfare functions. Benjamin Ward was probably the first to write about this
+    set, which he called the "majority set".
+
+    Any election method that complies with the Smith criterion also complies
+    with the Condorcet criterion, since if there is a Condorcet winner, then
+    that winner is the only member of the Smith set. Obviously, this means that
+    failing the Condorcet criterion automatically implies the non-compliance
+    with the Smith criterion as well. 
+    
+    Additionally, such sets comply with the Condorcet loser criterion. This is
+    notable, because even some Condorcet methods do not (Minimax). It also
+    implies the mutual majority criterion, since the Smith set is a subset of
+    the MMC set.
+    """
+
+
 class IIndependenceOfIrrelevantAlternativesCriterion(ICriterion):
     """
     In voting systems, independence of irrelevant alternatives is often
