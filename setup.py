@@ -1,4 +1,4 @@
-from setuptools import setup
+from distutils2.core import setup
 
 from ballotbox import meta
 from ballotbox.util import dist

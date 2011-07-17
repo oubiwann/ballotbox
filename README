@@ -25,6 +25,8 @@ and/or libraries:
 
  * repoze.sphinx.autointerface
 
+ * distutils2
+
 
 Additional Information
 ----------------------

@@ -500,4 +500,3 @@ Ranked Pair Voting
     >>> bb.add_votes(preference, 15)
 
     >>> bb.get_winner()
-    [(194, u'Nashville')]

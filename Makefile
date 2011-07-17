@@ -65,6 +65,11 @@ push-msg: commit-msg clean
 	mv MSG MSG.backup
 	touch MSG
 
+register:
+	python setup.py register
 
 upload: check
 	python setup.py sdist upload --show-response
+
+upload-docs: build-docs
+	python setup.py upload_docs --upload-dir=docs/html/
